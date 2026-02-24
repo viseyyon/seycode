@@ -7,7 +7,7 @@ import { Flag } from "../../flag/flag"
 import { bootstrap } from "../bootstrap"
 import { EOL } from "os"
 import { Filesystem } from "../../util/filesystem"
-import { createOpencodeClient, type Message, type OpencodeClient, type ToolPart } from "@opencode-ai/sdk/v2"
+import { createOpencodeClient, type Message, type OpencodeClient, type ToolPart } from "@seycode-ai/sdk/v2"
 import { Server } from "../../server/server"
 import { Provider } from "../../provider/provider"
 import { Agent } from "../../agent/agent"
@@ -278,7 +278,7 @@ export const RunCommand = cmd({
       })
       .option("attach", {
         type: "string",
-        describe: "attach to a running opencode server (e.g., http://localhost:4096)",
+        describe: "attach to a running seycode server (e.g., http://localhost:4096)",
       })
       .option("dir", {
         type: "string",
@@ -618,7 +618,7 @@ export const RunCommand = cmd({
         const request = new Request(input, init)
         return Server.App().fetch(request)
       }) as typeof globalThis.fetch
-      const sdk = createOpencodeClient({ baseUrl: "http://opencode.internal", fetch: fetchFn })
+      const sdk = createOpencodeClient({ baseUrl: "http://seycode.internal", fetch: fetchFn })
       await execute(sdk)
     })
   },

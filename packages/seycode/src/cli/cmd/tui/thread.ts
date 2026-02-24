@@ -9,7 +9,7 @@ import { iife } from "@/util/iife"
 import { Log } from "@/util/log"
 import { withNetworkOptions, resolveNetworkOptions } from "@/cli/network"
 import { Filesystem } from "@/util/filesystem"
-import type { Event } from "@opencode-ai/sdk/v2"
+import type { Event } from "@seycode-ai/sdk/v2"
 import type { EventSource } from "./context/sdk"
 import { win32DisableProcessedInput, win32InstallCtrlCGuard } from "./win32"
 
@@ -156,7 +156,7 @@ export const TuiThreadCommand = cmd({
         url = server.url
       } else {
         // Use direct RPC communication (no HTTP)
-        url = "http://opencode.internal"
+        url = "http://seycode.internal"
         customFetch = createWorkerFetch(client)
         events = createEventSource(client)
       }

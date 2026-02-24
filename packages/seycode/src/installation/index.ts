@@ -2,7 +2,7 @@ import { BusEvent } from "@/bus/bus-event"
 import path from "path"
 import { $ } from "bun"
 import z from "zod"
-import { NamedError } from "@opencode-ai/util/error"
+import { NamedError } from "@seycode-ai/util/error"
 import { Log } from "../util/log"
 import { iife } from "@/util/iife"
 import { Flag } from "../flag/flag"
@@ -191,7 +191,7 @@ export namespace Installation {
 
   export const VERSION = typeof OPENCODE_VERSION === "string" ? OPENCODE_VERSION : "local"
   export const CHANNEL = typeof OPENCODE_CHANNEL === "string" ? OPENCODE_CHANNEL : "local"
-  export const USER_AGENT = `opencode/${CHANNEL}/${VERSION}/${Flag.OPENCODE_CLIENT}`
+  export const USER_AGENT = `seycode/${CHANNEL}/${VERSION}/${Flag.OPENCODE_CLIENT}`
 
   export async function latest(installMethod?: Method) {
     const detectedMethod = installMethod || (await method())
@@ -205,7 +205,7 @@ export namespace Installation {
         if (!version) throw new Error(`Could not detect version for tap formula: ${formula}`)
         return version
       }
-      return fetch("https://formulae.brew.sh/api/formula/opencode.json")
+      return fetch("https://formulae.brew.sh/api/formula/seycode.json")
         .then((res) => {
           if (!res.ok) throw new Error(res.statusText)
           return res.json()
@@ -241,7 +241,7 @@ export namespace Installation {
     }
 
     if (detectedMethod === "scoop") {
-      return fetch("https://raw.githubusercontent.com/ScoopInstaller/Main/master/bucket/opencode.json", {
+      return fetch("https://raw.githubusercontent.com/ScoopInstaller/Main/master/bucket/seycode.json", {
         headers: { Accept: "application/json" },
       })
         .then((res) => {
@@ -251,7 +251,7 @@ export namespace Installation {
         .then((data: any) => data.version)
     }
 
-    return fetch("https://api.github.com/repos/anomalyco/opencode/releases/latest")
+    return fetch("https://api.github.com/repos/anomalyco/seycode/releases/latest")
       .then((res) => {
         if (!res.ok) throw new Error(res.statusText)
         return res.json()

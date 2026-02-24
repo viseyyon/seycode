@@ -10,7 +10,7 @@ import { Config } from "../../config/config"
 import { Global } from "../../global"
 import { Plugin } from "../../plugin"
 import { Instance } from "../../project/instance"
-import type { Hooks } from "@opencode-ai/plugin"
+import type { Hooks } from "@seycode-ai/plugin"
 
 type PluginAuth = NonNullable<Hooks["auth"]>
 
@@ -374,7 +374,7 @@ export const AuthLoginCommand = cmd({
           }
 
           prompts.log.warn(
-            `This only stores a credential for ${provider} - you will need configure it in opencode.json, check the docs for examples.`,
+            `This only stores a credential for ${provider} - you will need configure it in seycode.json, check the docs for examples.`,
           )
         }
 
@@ -383,7 +383,7 @@ export const AuthLoginCommand = cmd({
             "Amazon Bedrock authentication priority:\n" +
               "  1. Bearer token (AWS_BEARER_TOKEN_BEDROCK or /connect)\n" +
               "  2. AWS credential chain (profile, access keys, IAM roles, EKS IRSA)\n\n" +
-              "Configure via opencode.json options (profile, region, endpoint) or\n" +
+              "Configure via seycode.json options (profile, region, endpoint) or\n" +
               "AWS environment variables (AWS_PROFILE, AWS_REGION, AWS_ACCESS_KEY_ID, AWS_WEB_IDENTITY_TOKEN_FILE).",
           )
         }
@@ -398,7 +398,7 @@ export const AuthLoginCommand = cmd({
 
         if (["cloudflare", "cloudflare-ai-gateway"].includes(provider)) {
           prompts.log.info(
-            "Cloudflare AI Gateway can be configured with CLOUDFLARE_GATEWAY_ID, CLOUDFLARE_ACCOUNT_ID, and CLOUDFLARE_API_TOKEN environment variables. Read more: https://opencode.ai/docs/providers/#cloudflare-ai-gateway",
+            "Cloudflare AI Gateway can be configured with CLOUDFLARE_GATEWAY_ID, CLOUDFLARE_ACCOUNT_ID, and CLOUDFLARE_API_TOKEN environment variables. Read more: https://seycode.ai/docs/providers/#cloudflare-ai-gateway",
           )
         }
 

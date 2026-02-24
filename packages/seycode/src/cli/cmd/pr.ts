@@ -63,12 +63,12 @@ export const PrCommand = cmd({
               await $`git branch --set-upstream-to=${remoteName}/${headRefName} ${localBranchName}`.nothrow()
             }
 
-            // Check for opencode session link in PR body
+            // Check for seycode session link in PR body
             if (prInfo && prInfo.body) {
               const sessionMatch = prInfo.body.match(/https:\/\/opncd\.ai\/s\/([a-zA-Z0-9_-]+)/)
               if (sessionMatch) {
                 const sessionUrl = sessionMatch[0]
-                UI.println(`Found opencode session: ${sessionUrl}`)
+                UI.println(`Found seycode session: ${sessionUrl}`)
                 UI.println(`Importing session...`)
 
                 const importResult = await $`opencode import ${sessionUrl}`.nothrow()
@@ -94,17 +94,17 @@ export const PrCommand = cmd({
         // Launch opencode TUI with session ID if available
         const { spawn } = await import("child_process")
         const opencodeArgs = sessionId ? ["-s", sessionId] : []
-        const opencodeProcess = spawn("opencode", opencodeArgs, {
+        const seycodeProcess = spawn("opencode", opencodeArgs, {
           stdio: "inherit",
           cwd: process.cwd(),
         })
 
         await new Promise<void>((resolve, reject) => {
-          opencodeProcess.on("exit", (code) => {
+          seycodeProcess.on("exit", (code) => {
             if (code === 0) resolve()
             else reject(new Error(`opencode exited with code ${code}`))
           })
-          opencodeProcess.on("error", reject)
+          seycodeProcess.on("error", reject)
         })
       },
     })

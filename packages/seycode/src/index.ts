@@ -10,7 +10,7 @@ import { UninstallCommand } from "./cli/cmd/uninstall"
 import { ModelsCommand } from "./cli/cmd/models"
 import { UI } from "./cli/ui"
 import { Installation } from "./installation"
-import { NamedError } from "@opencode-ai/util/error"
+import { NamedError } from "@seycode-ai/util/error"
 import { FormatError } from "./cli/error"
 import { ServeCommand } from "./cli/cmd/serve"
 import { Filesystem } from "./util/filesystem"
@@ -81,7 +81,7 @@ const cli = yargs(hideBin(process.argv))
       args: process.argv.slice(2),
     })
 
-    const marker = path.join(Global.Path.data, "opencode.db")
+    const marker = path.join(Global.Path.data, "seycode.db")
     if (!(await Filesystem.exists(marker))) {
       const tty = process.stderr.isTTY
       process.stderr.write("Performing one time database migration, may take a few minutes..." + EOL)

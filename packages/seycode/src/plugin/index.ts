@@ -1,22 +1,22 @@
-import type { Hooks, PluginInput, Plugin as PluginInstance } from "@opencode-ai/plugin"
+import type { Hooks, PluginInput, Plugin as PluginInstance } from "@seycode-ai/plugin"
 import { Config } from "../config/config"
 import { Bus } from "../bus"
 import { Log } from "../util/log"
-import { createOpencodeClient } from "@opencode-ai/sdk"
+import { createOpencodeClient } from "@seycode-ai/sdk"
 import { Server } from "../server/server"
 import { BunProc } from "../bun"
 import { Instance } from "../project/instance"
 import { Flag } from "../flag/flag"
 import { CodexAuthPlugin } from "./codex"
 import { Session } from "../session"
-import { NamedError } from "@opencode-ai/util/error"
+import { NamedError } from "@seycode-ai/util/error"
 import { CopilotAuthPlugin } from "./copilot"
-import { gitlabAuthPlugin as GitlabAuthPlugin } from "@gitlab/opencode-gitlab-auth"
+import { gitlabAuthPlugin as GitlabAuthPlugin } from "@gitlab/seycode-gitlab-auth"
 
 export namespace Plugin {
   const log = Log.create({ service: "plugin" })
 
-  const BUILTIN = ["opencode-anthropic-auth@0.0.13"]
+  const BUILTIN = ["seycode-anthropic-auth@0.0.13"]
 
   // Built-in plugins that are directly imported (not installed from npm)
   const INTERNAL_PLUGINS: PluginInstance[] = [CodexAuthPlugin, CopilotAuthPlugin, GitlabAuthPlugin]
@@ -55,7 +55,7 @@ export namespace Plugin {
 
     for (let plugin of plugins) {
       // ignore old codex plugin since it is supported first party now
-      if (plugin.includes("opencode-openai-codex-auth") || plugin.includes("opencode-copilot-auth")) continue
+      if (plugin.includes("seycode-openai-codex-auth") || plugin.includes("seycode-copilot-auth")) continue
       log.info("loading plugin", { path: plugin })
       if (!plugin.startsWith("file://")) {
         const lastAtIndex = plugin.lastIndexOf("@")

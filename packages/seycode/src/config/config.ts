@@ -9,7 +9,7 @@ import { mergeDeep, pipe, unique } from "remeda"
 import { Global } from "../global"
 import fs from "fs/promises"
 import { lazy } from "../util/lazy"
-import { NamedError } from "@opencode-ai/util/error"
+import { NamedError } from "@seycode-ai/util/error"
 import { Flag } from "../flag/flag"
 import { Auth } from "../auth"
 import {
@@ -44,15 +44,15 @@ export namespace Config {
   function getManagedConfigDir(): string {
     switch (process.platform) {
       case "darwin":
-        return "/Library/Application Support/opencode"
+        return "/Library/Application Support/seycode"
       case "win32":
-        return path.join(process.env.ProgramData || "C:\\ProgramData", "opencode")
+        return path.join(process.env.ProgramData || "C:\\ProgramData", "seycode")
       default:
-        return "/etc/opencode"
+        return "/etc/seycode"
     }
   }
 
-  const managedConfigDir = process.env.OPENCODE_TEST_MANAGED_CONFIG_DIR || getManagedConfigDir()
+  const managedConfigDir = process.env.SEYCODE_TEST_MANAGED_CONFIG_DIR || getManagedConfigDir()
 
   // Custom merge function that concatenates array fields instead of replacing them
   function merge(target: Info, source: Info): Info {
@@ -69,32 +69,32 @@ export namespace Config {
   export const state = Instance.state(async () => {
     const auth = await Auth.all()
 
-    // Config loading order (low -> high precedence): https://opencode.ai/docs/config#precedence-order
-    // 1) Remote .well-known/opencode (org defaults)
-    // 2) Global config (~/.config/opencode/opencode.json{,c})
-    // 3) Custom config (OPENCODE_CONFIG)
-    // 4) Project config (opencode.json{,c})
-    // 5) .seycode directories (.seycode/agents/, .seycode/commands/, .seycode/plugins/, .seycode/opencode.json{,c})
-    // 6) Inline config (OPENCODE_CONFIG_CONTENT)
+    // Config loading order (low -> high precedence): https://seycode.ai/docs/config#precedence-order
+    // 1) Remote .well-known/seycode (org defaults)
+    // 2) Global config (~/.config/seycode/seycode.json{,c})
+    // 3) Custom config (SEYCODE_CONFIG)
+    // 4) Project config (seycode.json{,c})
+    // 5) .seycode directories (.seycode/agents/, .seycode/commands/, .seycode/plugins/, .seycode/seycode.json{,c})
+    // 6) Inline config (SEYCODE_CONFIG_CONTENT)
     // Managed config directory is enterprise-only and always overrides everything above.
     let result: Info = {}
     for (const [key, value] of Object.entries(auth)) {
       if (value.type === "wellknown") {
         process.env[value.key] = value.token
-        log.debug("fetching remote config", { url: `${key}/.well-known/opencode` })
-        const response = await fetch(`${key}/.well-known/opencode`)
+        log.debug("fetching remote config", { url: `${key}/.well-known/seycode` })
+        const response = await fetch(`${key}/.well-known/seycode`)
         if (!response.ok) {
           throw new Error(`failed to fetch remote config from ${key}: ${response.status}`)
         }
         const wellknown = (await response.json()) as any
         const remoteConfig = wellknown.config ?? {}
         // Add $schema to prevent load() from trying to write back to a non-existent file
-        if (!remoteConfig.$schema) remoteConfig.$schema = "https://opencode.ai/config.json"
+        if (!remoteConfig.$schema) remoteConfig.$schema = "https://seycode.ai/config.json"
         result = merge(
           result,
           await load(JSON.stringify(remoteConfig), {
-            dir: path.dirname(`${key}/.well-known/opencode`),
-            source: `${key}/.well-known/opencode`,
+            dir: path.dirname(`${key}/.well-known/seycode`),
+            source: `${key}/.well-known/seycode`,
           }),
         )
         log.debug("loaded remote config from well-known", { url: key })
@@ -109,14 +109,14 @@ export namespace Config {
     result = merge(result, await global())
 
     // Custom config path overrides global config.
-    if (Flag.OPENCODE_CONFIG) {
-      result = merge(result, await loadFile(Flag.OPENCODE_CONFIG))
-      log.debug("loaded custom config", { path: Flag.OPENCODE_CONFIG })
+    if (Flag.SEYCODE_CONFIG) {
+      result = merge(result, await loadFile(Flag.SEYCODE_CONFIG))
+      log.debug("loaded custom config", { path: Flag.SEYCODE_CONFIG })
     }
 
     // Project config overrides global and remote config.
     if (!Flag.OPENCODE_DISABLE_PROJECT_CONFIG) {
-      for (const file of ["opencode.jsonc", "opencode.json"]) {
+      for (const file of ["seycode.jsonc", "seycode.json"]) {
         const found = await Filesystem.findUp(file, Instance.directory, Instance.worktree)
         for (const resolved of found.toReversed()) {
           result = merge(result, await loadFile(resolved))
@@ -151,16 +151,16 @@ export namespace Config {
     ]
 
     // .seycode directory config overrides (project and global) config sources.
-    if (Flag.OPENCODE_CONFIG_DIR) {
-      directories.push(Flag.OPENCODE_CONFIG_DIR)
-      log.debug("loading config from OPENCODE_CONFIG_DIR", { path: Flag.OPENCODE_CONFIG_DIR })
+    if (Flag.SEYCODE_CONFIG_DIR) {
+      directories.push(Flag.SEYCODE_CONFIG_DIR)
+      log.debug("loading config from SEYCODE_CONFIG_DIR", { path: Flag.SEYCODE_CONFIG_DIR })
     }
 
     const deps = []
 
     for (const dir of unique(directories)) {
-      if (dir.endsWith(".seycode") || dir === Flag.OPENCODE_CONFIG_DIR) {
-        for (const file of ["opencode.jsonc", "opencode.json"]) {
+      if (dir.endsWith(".seycode") || dir === Flag.SEYCODE_CONFIG_DIR) {
+        for (const file of ["seycode.jsonc", "seycode.json"]) {
           log.debug(`loading config from ${path.join(dir, file)}`)
           result = merge(result, await loadFile(path.join(dir, file)))
           // to satisfy the type checker
@@ -184,15 +184,15 @@ export namespace Config {
     }
 
     // Inline config content overrides all non-managed config sources.
-    if (process.env.OPENCODE_CONFIG_CONTENT) {
+    if (process.env.SEYCODE_CONFIG_CONTENT) {
       result = merge(
         result,
-        await load(process.env.OPENCODE_CONFIG_CONTENT, {
+        await load(process.env.SEYCODE_CONFIG_CONTENT, {
           dir: Instance.directory,
-          source: "OPENCODE_CONFIG_CONTENT",
+          source: "SEYCODE_CONFIG_CONTENT",
         }),
       )
-      log.debug("loaded custom config from OPENCODE_CONFIG_CONTENT")
+      log.debug("loaded custom config from SEYCODE_CONFIG_CONTENT")
     }
 
     // Load managed config files last (highest priority) - enterprise admin-controlled
@@ -200,7 +200,7 @@ export namespace Config {
     // which would fail on system directories requiring elevated permissions
     // This way it only loads config file and not skills/plugins/commands
     if (existsSync(managedConfigDir)) {
-      for (const file of ["opencode.jsonc", "opencode.json"]) {
+      for (const file of ["seycode.jsonc", "seycode.json"]) {
         result = merge(result, await loadFile(path.join(managedConfigDir, file)))
       }
     }
@@ -273,7 +273,7 @@ export namespace Config {
     }))
     json.dependencies = {
       ...json.dependencies,
-      "@opencode-ai/plugin": targetVersion,
+      "@seycode-ai/plugin": targetVersion,
     }
     await Filesystem.writeJson(pkg, json)
     await new Promise((resolve) => setTimeout(resolve, 3000))
@@ -324,15 +324,15 @@ export namespace Config {
 
     const parsed = await Filesystem.readJson<{ dependencies?: Record<string, string> }>(pkg).catch(() => null)
     const dependencies = parsed?.dependencies ?? {}
-    const depVersion = dependencies["@opencode-ai/plugin"]
+    const depVersion = dependencies["@seycode-ai/plugin"]
     if (!depVersion) return true
 
     const targetVersion = Installation.isLocal() ? "latest" : Installation.VERSION
     if (targetVersion === "latest") {
-      const isOutdated = await PackageRegistry.isOutdated("@opencode-ai/plugin", depVersion, dir)
+      const isOutdated = await PackageRegistry.isOutdated("@seycode-ai/plugin", depVersion, dir)
       if (!isOutdated) return false
       log.info("Cached version is outdated, proceeding with install", {
-        pkg: "@opencode-ai/plugin",
+        pkg: "@seycode-ai/plugin",
         cachedVersion: depVersion,
       })
       return true
@@ -488,7 +488,7 @@ export namespace Config {
    *
    * @example
    * getPluginName("file:///path/to/plugin/foo.js") // "foo"
-   * getPluginName("oh-my-opencode@2.4.3") // "oh-my-opencode"
+   * getPluginName("oh-my-seycode@2.4.3") // "oh-my-seycode"
    * getPluginName("@scope/pkg@1.0.0") // "@scope/pkg"
    */
   export function getPluginName(plugin: string): string {
@@ -506,20 +506,20 @@ export namespace Config {
    * Deduplicates plugins by name, with later entries (higher priority) winning.
    * Priority order (highest to lowest):
    * 1. Local plugin/ directory
-   * 2. Local opencode.json
+   * 2. Local seycode.json
    * 3. Global plugin/ directory
-   * 4. Global opencode.json
+   * 4. Global seycode.json
    *
    * Since plugins are added in low-to-high priority order,
    * we reverse, deduplicate (keeping first occurrence), then restore order.
    */
   export function deduplicatePlugins(plugins: string[]): string[] {
     // seenNames: canonical plugin names for duplicate detection
-    // e.g., "oh-my-opencode", "@scope/pkg"
+    // e.g., "oh-my-seycode", "@scope/pkg"
     const seenNames = new Set<string>()
 
     // uniqueSpecifiers: full plugin specifiers to return
-    // e.g., "oh-my-opencode@2.4.3", "file:///path/to/plugin.js"
+    // e.g., "oh-my-seycode@2.4.3", "file:///path/to/plugin.js"
     const uniqueSpecifiers: string[] = []
 
     for (const specifier of plugins.toReversed()) {
@@ -948,7 +948,7 @@ export namespace Config {
       port: z.number().int().positive().optional().describe("Port to listen on"),
       hostname: z.string().optional().describe("Hostname to listen on"),
       mdns: z.boolean().optional().describe("Enable mDNS service discovery"),
-      mdnsDomain: z.string().optional().describe("Custom domain name for mDNS service (default: opencode.local)"),
+      mdnsDomain: z.string().optional().describe("Custom domain name for mDNS service (default: seycode.local)"),
       cors: z.array(z.string()).optional().describe("Additional domains to allow for CORS"),
     })
     .strict()
@@ -1021,11 +1021,11 @@ export namespace Config {
       keybinds: Keybinds.optional().describe("Custom keybind configurations"),
       logLevel: Log.Level.optional().describe("Log level"),
       tui: TUI.optional().describe("TUI specific settings"),
-      server: Server.optional().describe("Server configuration for opencode serve and web commands"),
+      server: Server.optional().describe("Server configuration for seycode serve and web commands"),
       command: z
         .record(z.string(), Command)
         .optional()
-        .describe("Command configuration, see https://opencode.ai/docs/commands"),
+        .describe("Command configuration, see https://seycode.ai/docs/commands"),
       skills: Skills.optional().describe("Additional skill folder paths"),
       watcher: z
         .object({
@@ -1092,7 +1092,7 @@ export namespace Config {
         })
         .catchall(Agent)
         .optional()
-        .describe("Agent configuration, see https://opencode.ai/docs/agents"),
+        .describe("Agent configuration, see https://seycode.ai/docs/agents"),
       provider: z
         .record(z.string(), Provider)
         .optional()
@@ -1215,8 +1215,8 @@ export namespace Config {
     let result: Info = pipe(
       {},
       mergeDeep(await loadFile(path.join(Global.Path.config, "config.json"))),
-      mergeDeep(await loadFile(path.join(Global.Path.config, "opencode.json"))),
-      mergeDeep(await loadFile(path.join(Global.Path.config, "opencode.jsonc"))),
+      mergeDeep(await loadFile(path.join(Global.Path.config, "seycode.json"))),
+      mergeDeep(await loadFile(path.join(Global.Path.config, "seycode.jsonc"))),
     )
 
     const legacy = path.join(Global.Path.config, "config")
@@ -1229,7 +1229,7 @@ export namespace Config {
         .then(async (mod) => {
           const { provider, model, ...rest } = mod.default
           if (provider && model) result.model = `${provider}/${model}`
-          result["$schema"] = "https://opencode.ai/config.json"
+          result["$schema"] = "https://seycode.ai/config.json"
           result = mergeDeep(result, rest)
           await Filesystem.writeJson(path.join(Global.Path.config, "config.json"), result)
           await fs.unlink(legacy)
@@ -1322,8 +1322,8 @@ export namespace Config {
     const parsed = Info.safeParse(data)
     if (parsed.success) {
       if (!parsed.data.$schema && isFile) {
-        parsed.data.$schema = "https://opencode.ai/config.json"
-        const updated = original.replace(/^\s*\{/, '{\n  "$schema": "https://opencode.ai/config.json",')
+        parsed.data.$schema = "https://seycode.ai/config.json"
+        const updated = original.replace(/^\s*\{/, '{\n  "$schema": "https://seycode.ai/config.json",')
         await Bun.write(options.path, updated).catch(() => {})
       }
       const data = parsed.data
@@ -1385,7 +1385,7 @@ export namespace Config {
   }
 
   function globalConfigFile() {
-    const candidates = ["opencode.jsonc", "opencode.json", "config.json"].map((file) =>
+    const candidates = ["seycode.jsonc", "seycode.json", "config.json"].map((file) =>
       path.join(Global.Path.config, file),
     )
     for (const file of candidates) {

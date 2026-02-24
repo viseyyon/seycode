@@ -241,7 +241,7 @@ export const GithubInstallCommand = cmd({
                 "",
                 "    3. Go to a GitHub issue and comment `/oc summarize` to see the agent in action",
                 "",
-                "   Learn more about the GitHub agent - https://opencode.ai/docs/github/#usage-examples",
+                "   Learn more about the GitHub agent - https://seycode.ai/docs/github/#usage-examples",
               ].join("\n"),
             )
           }
@@ -403,7 +403,7 @@ jobs:
           persist-credentials: false
 
       - name: Run opencode
-        uses: anomalyco/opencode/github@latest${envStr}
+        uses: anomalyco/seycode/github@latest${envStr}
         with:
           model: ${provider}/${model}`,
             )
@@ -521,7 +521,7 @@ export const GithubRunCommand = cmd({
           await addReaction(commentType)
         }
 
-        // Setup opencode session
+        // Setup seycode session
         const repoData = await fetchRepo()
         session = await Session.create({
           permission: [
@@ -539,7 +539,7 @@ export const GithubRunCommand = cmd({
           await Session.share(session.id)
           return session.id.slice(-8)
         })()
-        console.log("opencode session", session.id)
+        console.log("seycode session", session.id)
 
         // Handle event types:
         // REPO_EVENTS (schedule, workflow_dispatch): no issue/PR context, output to logs/PR only
@@ -1106,9 +1106,9 @@ export const GithubRunCommand = cmd({
           .join("")
         if (type === "schedule" || type === "dispatch") {
           const hex = crypto.randomUUID().slice(0, 6)
-          return `opencode/${type}-${hex}-${timestamp}`
+          return `seycode/${type}-${hex}-${timestamp}`
         }
-        return `opencode/${type}${issueId}-${timestamp}`
+        return `seycode/${type}${issueId}-${timestamp}`
       }
 
       async function pushToNewBranch(summary: string, branch: string, commit: boolean, isSchedule: boolean) {
@@ -1389,7 +1389,7 @@ Co-authored-by: ${actor} <${actor}@users.noreply.github.com>"`
 
           return `<a href="${shareBaseUrl}/s/${shareId}"><img width="200" alt="${titleAlt}" src="https://social-cards.sst.dev/opencode-share/${title64}.png?model=${providerID}/${modelID}&version=${session.version}&id=${shareId}" /></a>\n`
         })()
-        const shareUrl = shareId ? `[opencode session](${shareBaseUrl}/s/${shareId})&nbsp;&nbsp;|&nbsp;&nbsp;` : ""
+        const shareUrl = shareId ? `[seycode session](${shareBaseUrl}/s/${shareId})&nbsp;&nbsp;|&nbsp;&nbsp;` : ""
         return `\n\n${image}${shareUrl}[github run](${runUrl})`
       }
 
@@ -1450,7 +1450,7 @@ query($owner: String!, $repo: String!, $number: Int!) {
         return [
           "<github_action_context>",
           "You are running as a GitHub Action. Important:",
-          "- Git push and PR creation are handled AUTOMATICALLY by the opencode infrastructure after your response",
+          "- Git push and PR creation are handled AUTOMATICALLY by the seycode infrastructure after your response",
           "- Do NOT include warnings or disclaimers about GitHub tokens, workflow permissions, or PR creation capabilities",
           "- Do NOT suggest manual steps for creating PRs or pushing code - this happens automatically",
           "- Focus only on the code changes and your analysis/response",
@@ -1588,7 +1588,7 @@ query($owner: String!, $repo: String!, $number: Int!) {
         return [
           "<github_action_context>",
           "You are running as a GitHub Action. Important:",
-          "- Git push and PR creation are handled AUTOMATICALLY by the opencode infrastructure after your response",
+          "- Git push and PR creation are handled AUTOMATICALLY by the seycode infrastructure after your response",
           "- Do NOT include warnings or disclaimers about GitHub tokens, workflow permissions, or PR creation capabilities",
           "- Do NOT suggest manual steps for creating PRs or pushing code - this happens automatically",
           "- Focus only on the code changes and your analysis/response",

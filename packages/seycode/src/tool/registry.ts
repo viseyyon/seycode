@@ -16,7 +16,7 @@ import { Tool } from "./tool"
 import { Instance } from "../project/instance"
 import { Config } from "../config/config"
 import path from "path"
-import { type ToolContext as PluginToolContext, type ToolDefinition } from "@opencode-ai/plugin"
+import { type ToolContext as PluginToolContext, type ToolDefinition } from "@seycode-ai/plugin"
 import z from "zod"
 import { Plugin } from "../plugin"
 import { WebSearchTool } from "./websearch"
@@ -139,7 +139,7 @@ export namespace ToolRegistry {
         .filter((t) => {
           // Enable websearch/codesearch for zen users OR via enable flag
           if (t.id === "codesearch" || t.id === "websearch") {
-            return model.providerID === "opencode" || Flag.OPENCODE_ENABLE_EXA
+            return model.providerID === "seycode" || Flag.OPENCODE_ENABLE_EXA
           }
 
           // use apply tool in same format as codex

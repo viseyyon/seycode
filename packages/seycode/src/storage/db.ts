@@ -7,7 +7,7 @@ import { Context } from "../util/context"
 import { lazy } from "../util/lazy"
 import { Global } from "../global"
 import { Log } from "../util/log"
-import { NamedError } from "@opencode-ai/util/error"
+import { NamedError } from "@seycode-ai/util/error"
 import z from "zod"
 import path from "path"
 import { readFileSync, readdirSync, existsSync } from "fs"
@@ -25,7 +25,7 @@ export const NotFoundError = NamedError.create(
 const log = Log.create({ service: "db" })
 
 export namespace Database {
-  export const Path = path.join(Global.Path.data, "opencode.db")
+  export const Path = path.join(Global.Path.data, "seycode.db")
   type Schema = typeof schema
   export type Transaction = SQLiteTransaction<"sync", void, Schema>
 
@@ -66,9 +66,9 @@ export namespace Database {
   }
 
   export const Client = lazy(() => {
-    log.info("opening database", { path: path.join(Global.Path.data, "opencode.db") })
+    log.info("opening database", { path: path.join(Global.Path.data, "seycode.db") })
 
-    const sqlite = new BunDatabase(path.join(Global.Path.data, "opencode.db"), { create: true })
+    const sqlite = new BunDatabase(path.join(Global.Path.data, "seycode.db"), { create: true })
 
     sqlite.run("PRAGMA journal_mode = WAL")
     sqlite.run("PRAGMA synchronous = NORMAL")

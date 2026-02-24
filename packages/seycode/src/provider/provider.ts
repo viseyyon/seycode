@@ -8,7 +8,7 @@ import { Log } from "../util/log"
 import { BunProc } from "../bun"
 import { Plugin } from "../plugin"
 import { ModelsDev } from "./models"
-import { NamedError } from "@opencode-ai/util/error"
+import { NamedError } from "@seycode-ai/util/error"
 import { Auth } from "../auth"
 import { Env } from "../env"
 import { Instance } from "../project/instance"
@@ -128,13 +128,13 @@ export namespace Provider {
         },
       }
     },
-    async opencode(input) {
+    async seycode(input) {
       const hasKey = await (async () => {
         const env = Env.all()
         if (input.env.some((item) => env[item])) return true
         if (await Auth.get(input.id)) return true
         const config = await Config.get()
-        if (config.provider?.["opencode"]?.options?.apiKey) return true
+        if (config.provider?.["seycode"]?.options?.apiKey) return true
         return false
       })()
 
@@ -278,7 +278,7 @@ export namespace Provider {
           }
 
           // Region resolution precedence (highest to lowest):
-          // 1. options.region from opencode.json provider config
+          // 1. options.region from seycode.json provider config
           // 2. defaultRegion from AWS_REGION environment variable
           // 3. Default "us-east-1" (baked into defaultRegion)
           const region = options?.region ?? defaultRegion
@@ -361,8 +361,8 @@ export namespace Provider {
         autoload: false,
         options: {
           headers: {
-            "HTTP-Referer": "https://opencode.ai/",
-            "X-Title": "opencode",
+            "HTTP-Referer": "https://seycode.ai/",
+            "X-Title": "seycode",
           },
         },
       }
@@ -372,8 +372,8 @@ export namespace Provider {
         autoload: false,
         options: {
           headers: {
-            "http-referer": "https://opencode.ai/",
-            "x-title": "opencode",
+            "http-referer": "https://seycode.ai/",
+            "x-title": "seycode",
           },
         },
       }
@@ -458,8 +458,8 @@ export namespace Provider {
         autoload: false,
         options: {
           headers: {
-            "HTTP-Referer": "https://opencode.ai/",
-            "X-Title": "opencode",
+            "HTTP-Referer": "https://seycode.ai/",
+            "X-Title": "seycode",
           },
         },
       }
@@ -478,7 +478,7 @@ export namespace Provider {
       const providerConfig = config.provider?.["gitlab"]
 
       const aiGatewayHeaders = {
-        "User-Agent": `opencode/${Installation.VERSION} gitlab-ai-provider/${GITLAB_PROVIDER_VERSION} (${os.platform()} ${os.release()}; ${os.arch()})`,
+        "User-Agent": `seycode/${Installation.VERSION} gitlab-ai-provider/${GITLAB_PROVIDER_VERSION} (${os.platform()} ${os.release()}; ${os.arch()})`,
         ...(providerConfig?.options?.aiGatewayHeaders || {}),
       }
 
@@ -582,8 +582,8 @@ export namespace Provider {
         autoload: false,
         options: {
           headers: {
-            "HTTP-Referer": "https://opencode.ai/",
-            "X-Title": "opencode",
+            "HTTP-Referer": "https://seycode.ai/",
+            "X-Title": "seycode",
           },
         },
       }
@@ -1228,7 +1228,7 @@ export namespace Provider {
         "gemini-2.5-flash",
         "gpt-5-nano",
       ]
-      if (providerID.startsWith("opencode")) {
+      if (providerID.startsWith("seycode")) {
         priority = ["gpt-5-nano"]
       }
       if (providerID.startsWith("github-copilot")) {
@@ -1267,8 +1267,8 @@ export namespace Provider {
     }
 
     // Check if opencode provider is available before using it
-    const opencodeProvider = await state().then((state) => state.providers["opencode"])
-    if (opencodeProvider && opencodeProvider.models["gpt-5-nano"]) {
+    const seycodeProvider = await state().then((state) => state.providers["opencode"])
+    if (seycodeProvider && seycodeProvider.models["gpt-5-nano"]) {
       return getModel("opencode", "gpt-5-nano")
     }
 

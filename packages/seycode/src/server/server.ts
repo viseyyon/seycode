@@ -9,7 +9,7 @@ import { proxy } from "hono/proxy"
 import { basicAuth } from "hono/basic-auth"
 import z from "zod"
 import { Provider } from "../provider/provider"
-import { NamedError } from "@opencode-ai/util/error"
+import { NamedError } from "@seycode-ai/util/error"
 import { LSP } from "../lsp"
 import { Format } from "../format"
 import { TuiRoutes } from "./routes/tui"
@@ -217,7 +217,7 @@ export namespace Server {
               info: {
                 title: "opencode",
                 version: "0.0.3",
-                description: "opencode api",
+                description: "seycode api",
               },
               openapi: "3.1.1",
             },
@@ -565,7 +565,7 @@ export namespace Server {
         info: {
           title: "opencode",
           version: "1.0.0",
-          description: "opencode api",
+          description: "seycode api",
         },
         openapi: "3.1.1",
       },

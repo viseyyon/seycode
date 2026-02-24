@@ -41,7 +41,7 @@ import { Config } from "@/config/config"
 import { Todo } from "@/session/todo"
 import { z } from "zod"
 import { LoadAPIKeyError } from "ai"
-import type { AssistantMessage, Event, OpencodeClient, SessionMessageResponse } from "@opencode-ai/sdk/v2"
+import type { AssistantMessage, Event, OpencodeClient, SessionMessageResponse } from "@seycode-ai/sdk/v2"
 import { applyPatch } from "diff"
 
 type ModeOption = { id: string; name: string; description?: string }
@@ -1519,12 +1519,12 @@ export namespace ACP {
 
     if (specified && !providers.length) return specified
 
-    const opencodeProvider = providers.find((p) => p.id === "opencode")
-    if (opencodeProvider) {
-      if (opencodeProvider.models["big-pickle"]) {
+    const seycodeProvider = providers.find((p) => p.id === "opencode")
+    if (seycodeProvider) {
+      if (seycodeProvider.models["big-pickle"]) {
         return { providerID: "opencode", modelID: "big-pickle" }
       }
-      const [best] = Provider.sort(Object.values(opencodeProvider.models))
+      const [best] = Provider.sort(Object.values(seycodeProvider.models))
       if (best) {
         return {
           providerID: best.providerID,
