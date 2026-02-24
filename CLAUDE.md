@@ -245,7 +245,7 @@ bun run --cwd packages/app dev
 
 ## Default Skills & Agents
 
-This repository comes with **production-ready skills** in `.opencode/skill/` that make development 100% more productive. These skills should be used by default for all common tasks.
+This repository comes with **production-ready skills** in `.seycode/skill/` that make development 100% more productive. These skills should be used by default for all common tasks.
 
 ### 🛠️ Available Skills
 
@@ -298,7 +298,7 @@ This repository comes with **production-ready skills** in `.opencode/skill/` tha
 
 ### 🎯 Embedded Custom Agents
 
-The `.opencode/seycode.json` file defines specialized agents for common tasks:
+The `.seycode/seycode.json` file defines specialized agents for common tasks:
 
 | Agent                   | Purpose                                          | Invoke                      |
 | ----------------------- | ------------------------------------------------ | --------------------------- |
@@ -555,7 +555,7 @@ $ARGUMENTS
 
 ### Creating a New Skill
 
-1. **Create skill file** in `.opencode/skill/your-skill.md`
+1. **Create skill file** in `.seycode/skill/your-skill.md`
 2. **Add frontmatter** with name and description
 3. **Write instructions** - Be specific and actionable
 4. **Test the skill** - Use `@your-skill` to invoke
@@ -729,8 +729,8 @@ Beyond skills, you can create persistent custom agents in `opencode.json`.
 
 - **Default branch**: `dev` (not `main`)
 - **Package manager**: Bun 1.3+
-- **Tests**: Cannot run from repo root - must run from package directories like `packages/opencode`
-- **SDK regeneration**: Always run `./script/generate.ts` after changing `packages/opencode/src/server/server.ts`
+- **Tests**: Cannot run from repo root - must run from package directories like `packages/seycode`
+- **SDK regeneration**: Always run `./script/generate.ts` after changing `packages/seycode/src/server/server.ts`
 - **Parallel tool calls**: Use them whenever possible for better performance
 - **Always use skills**: Check available skills before implementing tasks manually
 
@@ -792,7 +792,7 @@ Don't wait to be asked. If you see an opportunity to use a skill, use it:
 
 ## When to Use What
 
-- **`bun dev`** - Default for CLI/TUI development (runs in packages/opencode by default)
+- **`bun dev`** - Default for CLI/TUI development (runs in packages/seycode by default)
 - **`bun dev <directory>`** - Run against specific directory
 - **`bun dev .`** - Run SeyCode on itself (the repo root)
 - **`bun dev serve`** - Start headless server (for web/desktop UI development)
@@ -825,10 +825,10 @@ bun typecheck
 
 ```bash
 # Build standalone executable
-./packages/opencode/script/build.ts --single
+./packages/seycode/script/build.ts --single
 
 # Run tests (from package directories, NOT from root)
-cd packages/opencode
+cd packages/seycode
 bun test --timeout 30000
 
 # Regenerate JavaScript SDK
@@ -856,7 +856,7 @@ bun run --cwd packages/desktop dev
 
 ### Adding a New Tool
 
-1. Create file in `packages/opencode/src/tool/builtin/your-tool.ts`
+1. Create file in `packages/seycode/src/tool/builtin/your-tool.ts`
 2. Implement the Tool interface:
    ```typescript
    export const YourTool = {
@@ -873,7 +873,7 @@ bun run --cwd packages/desktop dev
 ### Adding a New Provider
 
 1. First, submit PR to https://github.com/anomalyco/models.dev
-2. Import provider in `packages/opencode/src/provider/provider.ts`
+2. Import provider in `packages/seycode/src/provider/provider.ts`
 3. Add provider configuration and model mappings
 4. Test with your API key
 
@@ -888,20 +888,20 @@ bun run --cwd packages/desktop dev
 
 ```bash
 # Terminal 1: Start server with debugger
-bun run --inspect=ws://localhost:6499/ --cwd packages/opencode ./src/index.ts serve --port 4096
+bun run --inspect=ws://localhost:6499/ --cwd packages/seycode ./src/index.ts serve --port 4096
 
 # Terminal 2: Attach TUI to server
 opencode attach http://localhost:4096
 
 # Or debug TUI separately
-bun run --inspect=ws://localhost:6499/ --cwd packages/opencode --conditions=browser ./src/index.ts
+bun run --inspect=ws://localhost:6499/ --cwd packages/seycode --conditions=browser ./src/index.ts
 ```
 
 ## Testing
 
 ```bash
 # Run tests for specific package (NOT from root)
-cd packages/opencode
+cd packages/seycode
 bun test --timeout 30000
 
 # Run specific test file
@@ -925,7 +925,7 @@ bun test --coverage
 bun dev spawn
 
 # Or debug server separately
-bun run --inspect=ws://localhost:6499/ --cwd packages/opencode ./src/index.ts serve --port 4096
+bun run --inspect=ws://localhost:6499/ --cwd packages/seycode ./src/index.ts serve --port 4096
 ```
 
 ### Useful Environment Variables
@@ -944,7 +944,7 @@ See `.vscode/settings.example.json` and `.vscode/launch.example.json` for debug 
 
 ## Common Issues
 
-- **"do not run tests from root" error**: Run tests from package directories (`cd packages/opencode`), not repo root
+- **"do not run tests from root" error**: Run tests from package directories (`cd packages/seycode`), not repo root
 - **Breakpoints not working**: Use `bun dev spawn` or debug server separately with `--inspect`
 - **Desktop app won't build**: Install Tauri prerequisites - see [Tauri docs](https://v2.tauri.app/start/prerequisites/)
 - **Port 4096 already in use**: Specify different port with `--port` flag
@@ -958,7 +958,7 @@ See `.vscode/settings.example.json` and `.vscode/launch.example.json` for debug 
 2. Global `~/.config/opencode/`
 3. Custom `OPENCODE_CONFIG` env var
 4. Project root `opencode.json` or `opencode.jsonc`
-5. `.opencode` directories
+5. `.seycode` directories
 6. Inline `OPENCODE_CONFIG_CONTENT`
 7. Managed config (enterprise, overrides all)
 
@@ -1005,7 +1005,7 @@ Supports: JSON, JSONC, YAML, and Markdown frontmatter.
 ### Monorepo Structure
 
 Bun workspace with key packages:
-- `packages/opencode` - Core CLI and server (main package)
+- `packages/seycode` - Core CLI and server (main package)
 - `packages/app` - Web UI (SolidJS)
 - `packages/desktop` - Desktop app (Tauri wrapper)
 - `packages/sdk` - SDKs for various languages
@@ -1015,7 +1015,7 @@ Bun workspace with key packages:
 ### Client/Server Architecture
 
 SeyCode uses a **client/server split**:
-- **Server** - Hono-based HTTP server on port 4096 (`packages/opencode/src/server/`)
+- **Server** - Hono-based HTTP server on port 4096 (`packages/seycode/src/server/`)
 - **Clients** - TUI, Web UI, Desktop app, or external clients via ACP (Agent Client Protocol)
 - **Communication** - REST API with SSE for real-time updates
 
@@ -1053,7 +1053,7 @@ The TUI is just one client. The server can run locally while driven remotely (e.
 
 **Skills** (`src/skill/`):
 - SKILL.md files with frontmatter
-- Discovered from: `.claude/skills/`, `.agents/skills/`, `.opencode/skill/`, custom paths
+- Discovered from: `.claude/skills/`, `.agents/skills/`, `.seycode/skill/`, custom paths
 
 **LSP** (`src/lsp/`):
 - Manages multiple language servers (TypeScript, Python, Go, Rust, etc.)
@@ -1082,7 +1082,7 @@ The TUI is just one client. The server can run locally while driven remotely (e.
 
 ### Source Code Organization
 
-Key directories in `packages/opencode/src/`:
+Key directories in `packages/seycode/src/`:
 - `server/` - HTTP server and API routes
 - `session/` - Session management and LLM streaming
 - `agent/` - Agent definitions
@@ -1123,7 +1123,7 @@ See `AGENTS.md` for complete style guide. Key principles:
 
 - `CONTRIBUTING.md` - Contribution guidelines, PR requirements, issue policy
 - `AGENTS.md` - Complete style guide and coding standards
-- `packages/opencode/AGENTS.md` - Package-specific agent notes
+- `packages/seycode/AGENTS.md` - Package-specific agent notes
 - `src/acp/README.md` - Agent Client Protocol documentation
 - `.vscode/settings.example.json` - VSCode debug configurations
 - `SECURITY.md` - Security policies and vulnerability reporting
@@ -1145,7 +1145,7 @@ This repository implements a **revolutionary agent and skill-based development s
    - Resume from any point, rollback any action, zero manual routing, zero errors, continuous improvement
    - Makes SeyCode objectively better than Claude Code
 
-2. **16 Production-Ready Skills** (`.opencode/skill/`)
+2. **16 Production-Ready Skills** (`.seycode/skill/`)
    - prompt-engineer (automatic - Killer Feature #1)
    - memory-manager (automatic - Killer Feature #2)
    - agent-router (automatic - Killer Feature #3)
@@ -1156,7 +1156,7 @@ This repository implements a **revolutionary agent and skill-based development s
    - Invoke with `@skill-name`
    - Chain for complex workflows
 
-3. **13 Embedded Custom Agents** (`.opencode/seycode.json`)
+3. **13 Embedded Custom Agents** (`.seycode/seycode.json`)
    - prompt-enhancer (automatic)
    - memory-manager (automatic)
    - agent-router (automatic)
@@ -1219,7 +1219,7 @@ Every Task → @workflow-orchestrator → Skill Chain → Agents → Quality Che
 1. Create custom skills for your patterns
 2. Configure custom agents for your needs
 3. Chain skills for maximum productivity
-4. Contribute new skills back to `.opencode/skill/`
+4. Contribute new skills back to `.seycode/skill/`
 
 **For AI Assistants**:
 1. ALWAYS check available skills first

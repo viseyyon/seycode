@@ -241,8 +241,8 @@ brew install anomalyco/tap/opencode
 - **ARCHITECTURE.md** - Architectural deep dive
 - **AGENTS.md** - Style guide and coding standards
 - **CONTRIBUTING.md** - Contribution guidelines
-- `.opencode/skill/*.md` - Individual skill documentation
-- `.opencode/seycode.json` - Agent configurations
+- `.seycode/skill/*.md` - Individual skill documentation
+- `.seycode/seycode.json` - Agent configurations
 
 ## 🌐 Architecture Highlights
 

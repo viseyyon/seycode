@@ -18,7 +18,7 @@ Created a revolutionary **automatic prompt engineering system** that optimizes e
 
 ### Files Created
 
-1. **`.opencode/skill/prompt-engineer.md`** (267 lines)
+1. **`.seycode/skill/prompt-engineer.md`** (267 lines)
    - Comprehensive prompt engineering skill
    - Automatic intent classification
    - Context enhancement
@@ -65,7 +65,7 @@ This single feature makes SeyCode objectively better than Claude Code.
    - Enhanced productivity gains section
    - Comprehensive examples and workflows
 
-2. **All Skill Files** (12 files in `.opencode/skill/`)
+2. **All Skill Files** (12 files in `.seycode/skill/`)
    - `tool-creator.md` - Rebranded to SeyCode
    - `agent-creator.md` - Rebranded to SeyCode
    - `provider-adder.md` - Rebranded to SeyCode
@@ -80,8 +80,8 @@ This single feature makes SeyCode objectively better than Claude Code.
    - `prompt-engineer.md` - NEW! The killer feature
 
 3. **Configuration Files**
-   - Renamed: `.opencode/opencode.jsonc` → `.opencode/seycode.jsonc`
-   - Renamed: `.opencode/opencode.json` → `.opencode/seycode.json`
+   - Renamed: `.seycode/opencode.jsonc` → `.seycode/seycode.jsonc`
+   - Renamed: `.seycode/opencode.json` → `.seycode/seycode.json`
    - Updated: Added `prompt-enhancer` agent to seycode.json
    - Updated schema URL to `seycode.ai`
 
@@ -128,7 +128,7 @@ This single feature makes SeyCode objectively better than Claude Code.
 
 | File | Lines | Purpose |
 |------|-------|---------|
-| `.opencode/skill/prompt-engineer.md` | 267 | Automatic prompt optimization skill |
+| `.seycode/skill/prompt-engineer.md` | 267 | Automatic prompt optimization skill |
 | `ARCHITECTURE.md` | 493 | Complete architecture documentation |
 | `SEYCODE.md` | 308 | Marketing and overview |
 | `REBRANDING_SUMMARY.md` | This file | Summary of changes |
@@ -138,26 +138,26 @@ This single feature makes SeyCode objectively better than Claude Code.
 | File | Changes |
 |------|---------|
 | `CLAUDE.md` | Complete rebranding, added prompt engineering section, comparison table |
-| `.opencode/skill/tool-creator.md` | Rebranded to SeyCode |
-| `.opencode/skill/agent-creator.md` | Rebranded to SeyCode |
-| `.opencode/skill/provider-adder.md` | Rebranded to SeyCode |
-| `.opencode/skill/test-runner.md` | Rebranded to SeyCode |
-| `.opencode/skill/debug-helper.md` | Rebranded to SeyCode |
-| `.opencode/skill/sdk-regenerator.md` | Rebranded to SeyCode |
-| `.opencode/skill/architecture-explorer.md` | Rebranded to SeyCode |
-| `.opencode/skill/migration-creator.md` | Rebranded to SeyCode |
-| `.opencode/skill/lsp-configurator.md` | Rebranded to SeyCode |
-| `.opencode/skill/doc-generator.md` | Rebranded to SeyCode |
-| `.opencode/skill/workflow-orchestrator.md` | Rebranded to SeyCode |
-| `.opencode/seycode.json` | Added prompt-enhancer agent, updated schema |
-| `.opencode/seycode.jsonc` | Renamed from opencode.jsonc |
+| `.seycode/skill/tool-creator.md` | Rebranded to SeyCode |
+| `.seycode/skill/agent-creator.md` | Rebranded to SeyCode |
+| `.seycode/skill/provider-adder.md` | Rebranded to SeyCode |
+| `.seycode/skill/test-runner.md` | Rebranded to SeyCode |
+| `.seycode/skill/debug-helper.md` | Rebranded to SeyCode |
+| `.seycode/skill/sdk-regenerator.md` | Rebranded to SeyCode |
+| `.seycode/skill/architecture-explorer.md` | Rebranded to SeyCode |
+| `.seycode/skill/migration-creator.md` | Rebranded to SeyCode |
+| `.seycode/skill/lsp-configurator.md` | Rebranded to SeyCode |
+| `.seycode/skill/doc-generator.md` | Rebranded to SeyCode |
+| `.seycode/skill/workflow-orchestrator.md` | Rebranded to SeyCode |
+| `.seycode/seycode.json` | Added prompt-enhancer agent, updated schema |
+| `.seycode/seycode.jsonc` | Renamed from opencode.jsonc |
 
 ### Files Renamed (2)
 
 | From | To |
 |------|-----|
-| `.opencode/opencode.json` | `.opencode/seycode.json` |
-| `.opencode/opencode.jsonc` | `.opencode/seycode.jsonc` |
+| `.seycode/opencode.json` | `.seycode/seycode.json` |
+| `.seycode/opencode.jsonc` | `.seycode/seycode.jsonc` |
 
 ---
 

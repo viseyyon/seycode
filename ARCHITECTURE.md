@@ -426,7 +426,7 @@ Permission Check:
 ## 🔧 Extensibility Points
 
 ### 1. **Skills**
-Add `.md` files to `.opencode/skill/`
+Add `.md` files to `.seycode/skill/`
 
 ### 2. **Agents**
 Configure in `seycode.json`

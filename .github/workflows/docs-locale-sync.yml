@@ -63,11 +63,11 @@ jobs:
                   "packages/web/src/content/docs/*": "allow",
                   "packages/web/src/content/docs/*.mdx": "allow",
                   "packages/web/src/content/docs/*/*.mdx": "allow",
-                  ".opencode": "allow",
-                  ".opencode/agent": "allow",
-                  ".opencode/agent/glossary": "allow",
-                  ".opencode/agent/translator.md": "allow",
-                  ".opencode/agent/glossary/*.md": "allow"
+                  ".seycode": "allow",
+                  ".seycode/agent": "allow",
+                  ".seycode/agent/glossary": "allow",
+                  ".seycode/agent/translator.md": "allow",
+                  ".seycode/agent/glossary/*.md": "allow"
                 },
                 "edit": {
                   "*": "deny",
@@ -76,7 +76,7 @@ jobs:
                 "glob": {
                   "*": "deny",
                   "packages/web/src/content/docs*": "allow",
-                  ".opencode/agent/glossary*": "allow"
+                  ".seycode/agent/glossary*": "allow"
                 },
                 "task": {
                   "*": "deny",
@@ -89,8 +89,8 @@ jobs:
                     "*": "deny",
                     "read": {
                       "*": "deny",
-                      ".opencode/agent/translator.md": "allow",
-                      ".opencode/agent/glossary/*.md": "allow"
+                      ".seycode/agent/translator.md": "allow",
+                      ".seycode/agent/glossary/*.md": "allow"
                     }
                   }
                 }
@@ -110,7 +110,7 @@ jobs:
 
             Requirements:
             1. Update all relevant locale docs under packages/web/src/content/docs/<locale>/ so they reflect these English page changes.
-            2. You MUST use the Task tool for translation work and launch subagents with subagent_type `translator` (defined in .opencode/agent/translator.md).
+            2. You MUST use the Task tool for translation work and launch subagents with subagent_type `translator` (defined in .seycode/agent/translator.md).
             3. Do not translate directly in the primary agent. Use translator subagent output as the source for locale text updates.
             4. Run translator subagent Task calls in parallel whenever file/locale translation work is independent.
             5. Use only the minimum tools needed for this task (read/glob, file edits, and translator Task). Do not use shell, web, search, or GitHub tools for translation work.

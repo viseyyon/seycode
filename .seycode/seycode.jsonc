@@ -1,0 +1,13 @@
+{
+  "$schema": "https://seycode.ai/config.json",
+  "provider": {
+    "seycode": {
+      "options": {},
+    },
+  },
+  "mcp": {},
+  "tools": {
+    "github-triage": false,
+    "github-pr-search": false,
+  },
+}
