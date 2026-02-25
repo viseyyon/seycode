@@ -26,49 +26,55 @@ Complete guide to installing, configuring, and using SeyCode - the revolutionary
 ### Prerequisites
 
 **Required:**
-- [Bun](https://bun.sh) 1.3 or higher (JavaScript runtime & package manager)
 - Git
 - 4GB+ RAM
 - Internet connection
+- macOS, Linux, or Windows (WSL2)
 
 **Optional:**
-- Node.js 18+ (if you prefer npm/yarn)
 - VS Code (for VS Code extension)
 - Rust toolchain (for desktop app development)
+
+**Note**: All runtimes and dependencies are installed automatically.
 
 ---
 
 ## Installation
 
-### Option 1: Quick Install (Recommended)
+### Option 1: One-Command Install (Recommended)
 
 ```bash
-# 1. Install Bun (if not already installed)
-curl -fsSL https://bun.sh/install | bash
+# Install everything with one command
+curl -fsSL https://raw.githubusercontent.com/viseyyon/seycode/dev/install.sh | bash
 
-# 2. Clone the repository
-git clone https://github.com/viseyyon/seycode.git
-cd seycode
+# Restart terminal or reload profile
+source ~/.zshrc
 
-# 3. Install dependencies
-sey install
-
-# 4. Install 'sey' command globally (optional but recommended)
-./scripts/install-sey.sh
-
-# 5. Run SeyCode
+# Done! Start using it
 sey dev
 ```
 
-### Option 2: Global Installation
+This automatically installs:
+- ✅ Runtime dependencies
+- ✅ SeyCode CLI
+- ✅ All required packages
+- ✅ The `sey` command
+
+### Option 2: Manual Install
 
 ```bash
-# Install SeyCode globally
-sey install -g seycode
+# Clone the repository
+git clone https://github.com/viseyyon/seycode.git
+cd seycode
 
-# Run from anywhere
-seycode
+# Run installer
+./install.sh
+
+# Restart terminal
+source ~/.zshrc
 ```
+
+### Option 3: From Source (Development)
 
 ### Option 3: From Source (Development)
 
@@ -77,8 +83,8 @@ seycode
 git clone https://github.com/viseyyon/seycode.git
 cd seycode
 
-# Install dependencies
-sey install
+# Run installer
+./install.sh
 
 # Run in development mode
 sey dev
@@ -614,12 +620,12 @@ echo 'export ANTHROPIC_API_KEY="sk-ant-..."' >> ~/.zshrc
 source ~/.zshrc
 ```
 
-### Issue: "Command not found: bun"
+### Issue: "Runtime not available"
 
 **Solution:**
 ```bash
-# Install Bun
-curl -fsSL https://bun.sh/install | bash
+# Reinstall SeyCode (includes runtime)
+curl -fsSL https://raw.githubusercontent.com/viseyyon/seycode/dev/install.sh | bash
 
 # Restart terminal or source profile
 source ~/.zshrc

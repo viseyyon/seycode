@@ -4,17 +4,7 @@ Get SeyCode running in 5 minutes. For complete guide, see [INSTALLATION.md](./IN
 
 ---
 
-## 1. Install Bun
-
-```bash
-curl -fsSL https://bun.sh/install | bash
-```
-
-Restart your terminal.
-
----
-
-## 2. Get API Key
+## 1. Get API Key
 
 Choose **ONE** provider (Anthropic recommended):
 
@@ -38,10 +28,31 @@ Choose **ONE** provider (Anthropic recommended):
 
 ---
 
+## 2. Install SeyCode
+
+**One-command installation:**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/viseyyon/seycode/dev/install.sh | bash
+```
+
+This installs everything you need automatically.
+
+**Or clone and install manually:**
+
+```bash
+git clone https://github.com/viseyyon/seycode.git
+cd seycode
+./install.sh
+```
+
+---
+
 ## 3. Set API Key
 
 ```bash
 # Add to ~/.zshrc or ~/.bashrc
+export ANTHROPIC_API_KEY="sk-ant-your-key-here"
 echo 'export ANTHROPIC_API_KEY="sk-ant-your-key-here"' >> ~/.zshrc
 
 # Apply changes
@@ -56,23 +67,7 @@ echo $ANTHROPIC_API_KEY
 
 ---
 
-## 4. Install SeyCode
-
-```bash
-# Clone repository
-git clone https://github.com/viseyyon/seycode.git
-cd seycode
-
-# Install dependencies
-sey install
-
-# Install 'sey' command globally (optional but recommended)
-./scripts/install-sey.sh
-```
-
----
-
-## 5. Start SeyCode
+## 4. Start SeyCode
 
 ```bash
 # Start in current directory
@@ -86,7 +81,7 @@ You should see the SeyCode TUI (Terminal User Interface) start up!
 
 ---
 
-## 6. First Commands
+## 5. First Commands
 
 Try these in the SeyCode prompt:
 
