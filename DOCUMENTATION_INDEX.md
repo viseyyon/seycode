@@ -7,8 +7,9 @@ Complete guide to all SeyCode documentation.
 **New to SeyCode?** Start here:
 
 1. **[GETTING_STARTED.md](./GETTING_STARTED.md)** - Installation and first steps
-2. **[README.md](./README.md)** - Project overview and quick reference
-3. **[SEYCODE.md](./SEYCODE.md)** - Marketing overview and killer features
+2. **[QUICK_START_MODELS.md](./QUICK_START_MODELS.md)** - Multi-model setup in 5 minutes
+3. **[README.md](./README.md)** - Project overview and quick reference
+4. **[SEYCODE.md](./SEYCODE.md)** - Marketing overview and killer features
 
 ## 👤 User Documentation
 
@@ -27,6 +28,7 @@ Complete guide to all SeyCode documentation.
 | Document | Description | Lines | Status |
 |----------|-------------|-------|--------|
 | [PROVIDER_SETUP.md](./PROVIDER_SETUP.md) | Complete provider configuration guide | 800+ | ✅ Complete |
+| [MODEL_REGISTRY.md](./MODEL_REGISTRY.md) | Multi-model fallback & registry system | 1,000+ | ✅ Complete |
 | Configuration Reference | All config options | - | ⏳ In GETTING_STARTED.md |
 | Command Reference | CLI commands | - | ⏳ In GETTING_STARTED.md |
 | Keyboard Shortcuts | TUI/UI shortcuts | - | ⏳ In GETTING_STARTED.md |

@@ -1,0 +1,373 @@
+{
+  "$schema": "./model-registry-schema.json",
+  "version": "1.0.0",
+  "lastUpdated": "2026-02-25",
+  "updateInterval": 3600000,
+  "modelCategories": {
+    "flagship": {
+      "description": "Most capable models for complex tasks",
+      "models": {
+        "primary": {
+          "provider": "anthropic",
+          "model": "claude-opus-4-6",
+          "release": "2025-11-01",
+          "features": ["reasoning", "tool_call", "attachment", "interleaved"],
+          "contextWindow": 200000,
+          "costPer1M": {
+            "input": 15.0,
+            "output": 75.0
+          }
+        },
+        "backup": [
+          {
+            "provider": "anthropic",
+            "model": "claude-opus-4-5",
+            "release": "2025-11-01"
+          },
+          {
+            "provider": "openai",
+            "model": "gpt-5.2",
+            "release": "2025-latest"
+          }
+        ]
+      }
+    },
+    "balanced": {
+      "description": "Best balance of performance and cost",
+      "models": {
+        "primary": {
+          "provider": "anthropic",
+          "model": "claude-3-7-sonnet-20250219",
+          "release": "2025-02-19",
+          "features": ["reasoning", "tool_call", "attachment", "interleaved"],
+          "contextWindow": 200000,
+          "costPer1M": {
+            "input": 3.0,
+            "output": 15.0
+          }
+        },
+        "backup": [
+          {
+            "provider": "anthropic",
+            "model": "claude-sonnet-4-0",
+            "release": "2025-latest"
+          },
+          {
+            "provider": "openai",
+            "model": "gpt-4o",
+            "release": "2024-11-20"
+          },
+          {
+            "provider": "google",
+            "model": "gemini-2.5-pro",
+            "release": "2025-latest"
+          }
+        ]
+      }
+    },
+    "fast": {
+      "description": "Fastest models for quick responses",
+      "models": {
+        "primary": {
+          "provider": "anthropic",
+          "model": "claude-haiku-4-5",
+          "release": "2025-10-01",
+          "features": ["tool_call", "attachment"],
+          "contextWindow": 200000,
+          "costPer1M": {
+            "input": 0.8,
+            "output": 4.0
+          }
+        },
+        "backup": [
+          {
+            "provider": "google",
+            "model": "gemini-2.5-flash",
+            "release": "2025-latest"
+          },
+          {
+            "provider": "openai",
+            "model": "gpt-4o-mini",
+            "release": "2024-latest"
+          }
+        ]
+      }
+    },
+    "coding": {
+      "description": "Specialized for code generation and analysis",
+      "models": {
+        "primary": {
+          "provider": "openai",
+          "model": "gpt-5.1-codex",
+          "release": "2025-latest",
+          "features": ["reasoning", "tool_call", "code-specialized"],
+          "contextWindow": 128000
+        },
+        "backup": [
+          {
+            "provider": "anthropic",
+            "model": "claude-3-7-sonnet-20250219",
+            "release": "2025-02-19"
+          },
+          {
+            "provider": "openai",
+            "model": "gpt-5-codex",
+            "release": "2025-latest"
+          }
+        ]
+      }
+    },
+    "reasoning": {
+      "description": "Advanced reasoning capabilities",
+      "models": {
+        "primary": {
+          "provider": "openai",
+          "model": "gpt-5.2",
+          "release": "2025-latest",
+          "features": ["reasoning", "extended-thinking"],
+          "contextWindow": 200000
+        },
+        "backup": [
+          {
+            "provider": "anthropic",
+            "model": "claude-opus-4-6",
+            "release": "2025-11-01"
+          },
+          {
+            "provider": "openai",
+            "model": "gpt-5.1",
+            "release": "2025-latest"
+          }
+        ]
+      }
+    },
+    "multimodal": {
+      "description": "Best for image, audio, video processing",
+      "models": {
+        "primary": {
+          "provider": "google",
+          "model": "gemini-2.5-pro",
+          "release": "2025-latest",
+          "features": ["image", "audio", "video", "pdf"],
+          "contextWindow": 1000000
+        },
+        "backup": [
+          {
+            "provider": "openai",
+            "model": "gpt-4o",
+            "release": "2024-11-20"
+          },
+          {
+            "provider": "anthropic",
+            "model": "claude-opus-4-6",
+            "release": "2025-11-01"
+          }
+        ]
+      }
+    },
+    "budget": {
+      "description": "Cost-effective models for high-volume tasks",
+      "models": {
+        "primary": {
+          "provider": "google",
+          "model": "gemini-2.5-flash-lite",
+          "release": "2025-latest",
+          "contextWindow": 1000000,
+          "costPer1M": {
+            "input": 0.075,
+            "output": 0.30
+          }
+        },
+        "backup": [
+          {
+            "provider": "anthropic",
+            "model": "claude-haiku-4-5",
+            "release": "2025-10-01"
+          },
+          {
+            "provider": "openai",
+            "model": "gpt-4o-mini",
+            "release": "2024-latest"
+          }
+        ]
+      }
+    }
+  },
+  "agentRecommendations": {
+    "build": {
+      "category": "balanced",
+      "reason": "Requires good code quality with reasonable cost",
+      "primary": "claude-3-7-sonnet-20250219",
+      "fallback": ["claude-sonnet-4-0", "gpt-4o", "gemini-2.5-pro"]
+    },
+    "plan": {
+      "category": "fast",
+      "reason": "Planning requires quick responses",
+      "primary": "claude-haiku-4-5",
+      "fallback": ["gemini-2.5-flash", "gpt-4o-mini"]
+    },
+    "prompt-enhancer": {
+      "category": "fast",
+      "reason": "Must be fast to avoid slowing down workflow",
+      "primary": "claude-haiku-4-5",
+      "fallback": ["gemini-2.5-flash-lite", "gpt-4o-mini"]
+    },
+    "memory-manager": {
+      "category": "fast",
+      "reason": "Memory operations need to be quick",
+      "primary": "claude-haiku-4-5",
+      "fallback": ["gemini-2.5-flash"]
+    },
+    "agent-router": {
+      "category": "fast",
+      "reason": "Routing decisions must be instant",
+      "primary": "claude-haiku-4-5",
+      "fallback": ["gemini-2.5-flash", "gpt-4o-mini"]
+    },
+    "self-corrector": {
+      "category": "balanced",
+      "reason": "Needs good reasoning for error correction",
+      "primary": "claude-3-7-sonnet-20250219",
+      "fallback": ["gpt-4o", "gemini-2.5-pro"]
+    },
+    "self-evolver": {
+      "category": "flagship",
+      "reason": "Complex pattern analysis requires best model",
+      "primary": "claude-opus-4-6",
+      "fallback": ["gpt-5.2", "claude-opus-4-5"]
+    },
+    "security-auditor": {
+      "category": "flagship",
+      "reason": "Security is critical, requires best model",
+      "primary": "claude-opus-4-6",
+      "fallback": ["gpt-5.2", "claude-3-7-sonnet-20250219"]
+    },
+    "test-generator": {
+      "category": "coding",
+      "reason": "Specialized code generation",
+      "primary": "gpt-5.1-codex",
+      "fallback": ["claude-3-7-sonnet-20250219", "gpt-5-codex"]
+    },
+    "code-reviewer": {
+      "category": "flagship",
+      "reason": "Code review is critical for quality",
+      "primary": "claude-opus-4-6",
+      "fallback": ["gpt-5.2", "claude-3-7-sonnet-20250219"]
+    },
+    "perf-analyzer": {
+      "category": "balanced",
+      "reason": "Performance analysis needs good reasoning",
+      "primary": "claude-3-7-sonnet-20250219",
+      "fallback": ["gpt-4o", "gemini-2.5-pro"]
+    },
+    "doc-writer": {
+      "category": "balanced",
+      "reason": "Documentation requires good language skills",
+      "primary": "gpt-4o",
+      "fallback": ["claude-3-7-sonnet-20250219", "gemini-2.5-pro"]
+    },
+    "refactor-agent": {
+      "category": "coding",
+      "reason": "Code refactoring is specialized",
+      "primary": "gpt-5.1-codex",
+      "fallback": ["claude-3-7-sonnet-20250219", "gpt-5-codex"]
+    },
+    "api-designer": {
+      "category": "balanced",
+      "reason": "API design requires balanced capabilities",
+      "primary": "claude-3-7-sonnet-20250219",
+      "fallback": ["gpt-4o", "gemini-2.5-pro"]
+    }
+  },
+  "taskTypeRecommendations": {
+    "code_generation": {
+      "primary": "gpt-5.1-codex",
+      "fallback": ["claude-3-7-sonnet-20250219", "gpt-5-codex"]
+    },
+    "code_review": {
+      "primary": "claude-opus-4-6",
+      "fallback": ["gpt-5.2", "claude-3-7-sonnet-20250219"]
+    },
+    "debugging": {
+      "primary": "claude-3-7-sonnet-20250219",
+      "fallback": ["gpt-4o", "gemini-2.5-pro"]
+    },
+    "documentation": {
+      "primary": "gpt-4o",
+      "fallback": ["claude-3-7-sonnet-20250219", "gemini-2.5-pro"]
+    },
+    "testing": {
+      "primary": "gpt-5.1-codex",
+      "fallback": ["claude-3-7-sonnet-20250219", "gpt-4o"]
+    },
+    "refactoring": {
+      "primary": "gpt-5.1-codex",
+      "fallback": ["claude-3-7-sonnet-20250219", "gpt-5-codex"]
+    },
+    "security_audit": {
+      "primary": "claude-opus-4-6",
+      "fallback": ["gpt-5.2", "claude-3-7-sonnet-20250219"]
+    },
+    "performance_optimization": {
+      "primary": "claude-3-7-sonnet-20250219",
+      "fallback": ["gpt-4o", "gemini-2.5-pro"]
+    },
+    "architecture_design": {
+      "primary": "claude-opus-4-6",
+      "fallback": ["gpt-5.2", "claude-3-7-sonnet-20250219"]
+    },
+    "quick_tasks": {
+      "primary": "claude-haiku-4-5",
+      "fallback": ["gemini-2.5-flash", "gpt-4o-mini"]
+    }
+  },
+  "providerStatus": {
+    "anthropic": {
+      "status": "active",
+      "latestModel": "claude-opus-4-6",
+      "lastChecked": "2026-02-25",
+      "apiVersion": "2023-06-01"
+    },
+    "openai": {
+      "status": "active",
+      "latestModel": "gpt-5.2",
+      "lastChecked": "2026-02-25",
+      "apiVersion": "v1"
+    },
+    "google": {
+      "status": "active",
+      "latestModel": "gemini-2.5-pro",
+      "lastChecked": "2026-02-25",
+      "apiVersion": "v1"
+    },
+    "azure": {
+      "status": "active",
+      "latestModel": "gpt-4o",
+      "lastChecked": "2026-02-25",
+      "note": "Uses Azure OpenAI Service"
+    },
+    "openrouter": {
+      "status": "active",
+      "latestModel": "multiple",
+      "lastChecked": "2026-02-25",
+      "note": "Aggregates 100+ models from all providers"
+    }
+  },
+  "fallbackStrategy": {
+    "retryAttempts": 3,
+    "retryDelay": 1000,
+    "timeoutMs": 30000,
+    "fallbackOrder": [
+      "primary",
+      "backup[0]",
+      "backup[1]",
+      "backup[2]"
+    ],
+    "errorHandling": {
+      "rate_limit": "use_backup_immediately",
+      "timeout": "retry_then_fallback",
+      "api_error": "fallback_immediately",
+      "invalid_request": "no_fallback"
+    }
+  }
+}

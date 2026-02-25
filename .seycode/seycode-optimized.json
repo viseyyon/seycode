@@ -1,0 +1,302 @@
+{
+  "$schema": "./seycode-schema.json",
+  "version": "1.0.0",
+  "description": "Optimized SeyCode configuration with multi-model fallback support",
+
+  "provider": {
+    "anthropic": {
+      "options": {
+        "apiKey": "${ANTHROPIC_API_KEY}",
+        "headers": {
+          "anthropic-beta": "claude-code-20250219,interleaved-thinking-2025-05-14,fine-grained-tool-streaming-2025-05-14"
+        }
+      }
+    },
+    "openai": {
+      "options": {
+        "apiKey": "${OPENAI_API_KEY}"
+      }
+    },
+    "google": {
+      "options": {
+        "apiKey": "${GOOGLE_GENERATIVE_AI_API_KEY}"
+      }
+    },
+    "azure": {
+      "options": {
+        "apiKey": "${AZURE_API_KEY}",
+        "resourceName": "${AZURE_RESOURCE_NAME}"
+      }
+    },
+    "openrouter": {
+      "options": {
+        "apiKey": "${OPENROUTER_API_KEY}"
+      }
+    }
+  },
+
+  "agents": {
+    "build": {
+      "mode": "agent",
+      "description": "Main development agent with balanced capabilities",
+      "model": {
+        "primary": "claude-3-7-sonnet-20250219",
+        "fallback": ["claude-sonnet-4-0", "openai/gpt-4o", "google/gemini-2.5-pro"]
+      },
+      "temperature": 0.7,
+      "maxRetries": 3,
+      "permission": {
+        "read": { "*": "allow" },
+        "write": { "*": "allow" },
+        "edit": { "*": "allow" },
+        "bash": { "*": "ask" }
+      }
+    },
+
+    "plan": {
+      "mode": "agent",
+      "description": "Fast planning with read-only access",
+      "model": {
+        "primary": "claude-haiku-4-5",
+        "fallback": ["google/gemini-2.5-flash", "openai/gpt-4o-mini"]
+      },
+      "temperature": 0.5,
+      "permission": {
+        "read": { "*": "allow" },
+        "write": { "*": "deny" },
+        "edit": {
+          "plan.md": "allow",
+          "*.plan.md": "allow",
+          "*": "deny"
+        },
+        "bash": { "*": "deny" }
+      }
+    },
+
+    "prompt-enhancer": {
+      "mode": "subagent",
+      "auto": true,
+      "priority": -1000,
+      "description": "Automatically enhances all prompts (AUTOMATIC - Killer Feature #1)",
+      "model": {
+        "primary": "claude-haiku-4-5",
+        "fallback": ["google/gemini-2.5-flash-lite", "openai/gpt-4o-mini"]
+      },
+      "temperature": 0.7,
+      "permission": {
+        "read": { "*": "allow" },
+        "write": { "*": "deny" },
+        "bash": { "*": "deny" }
+      }
+    },
+
+    "memory-manager": {
+      "mode": "subagent",
+      "auto": true,
+      "priority": -999,
+      "description": "Automatically manages memory and checkpoints (AUTOMATIC - Killer Feature #2)",
+      "model": {
+        "primary": "claude-haiku-4-5",
+        "fallback": ["google/gemini-2.5-flash"]
+      },
+      "temperature": 0.3,
+      "permission": {
+        "read": { "*": "allow" },
+        "write": { ".seycode/memory/**": "allow", "*": "deny" },
+        "bash": { "*": "deny" }
+      }
+    },
+
+    "agent-router": {
+      "mode": "subagent",
+      "auto": true,
+      "priority": -998,
+      "description": "Automatically routes to optimal agents (AUTOMATIC - Killer Feature #3)",
+      "model": {
+        "primary": "claude-haiku-4-5",
+        "fallback": ["google/gemini-2.5-flash", "openai/gpt-4o-mini"]
+      },
+      "temperature": 0.2,
+      "permission": {
+        "read": { "*": "allow" },
+        "write": { "*": "deny" },
+        "bash": { "*": "deny" }
+      }
+    },
+
+    "self-corrector": {
+      "mode": "subagent",
+      "auto": true,
+      "priority": -997,
+      "description": "Automatically fixes errors and learns (AUTOMATIC - Killer Feature #4)",
+      "model": {
+        "primary": "claude-3-7-sonnet-20250219",
+        "fallback": ["openai/gpt-4o", "google/gemini-2.5-pro"]
+      },
+      "temperature": 0.3,
+      "permission": {
+        "read": { "*": "allow" },
+        "write": { ".seycode/learning/**": "allow", "*": "ask" },
+        "edit": { "*": "ask" },
+        "bash": { "*": "ask" }
+      }
+    },
+
+    "self-evolver": {
+      "mode": "subagent",
+      "auto": true,
+      "priority": -996,
+      "description": "Automatically improves and adapts (AUTOMATIC - Killer Feature #5)",
+      "model": {
+        "primary": "claude-opus-4-6",
+        "fallback": ["openai/gpt-5.2", "claude-opus-4-5"]
+      },
+      "temperature": 0.6,
+      "permission": {
+        "read": { "*": "allow" },
+        "write": { ".seycode/skills/**": "allow", ".seycode/evolution/**": "allow", "*": "deny" },
+        "bash": { "*": "deny" }
+      }
+    },
+
+    "security-auditor": {
+      "mode": "subagent",
+      "description": "Comprehensive security auditing",
+      "model": {
+        "primary": "claude-opus-4-6",
+        "fallback": ["openai/gpt-5.2", "claude-3-7-sonnet-20250219"]
+      },
+      "temperature": 0.2,
+      "permission": {
+        "read": { "*": "allow" },
+        "write": { "security-audit-*.md": "allow", "*": "deny" },
+        "bash": { "grep*": "allow", "find*": "allow", "*": "deny" }
+      }
+    },
+
+    "test-generator": {
+      "mode": "subagent",
+      "description": "Generate comprehensive tests",
+      "model": {
+        "primary": "openai/gpt-5.1-codex",
+        "fallback": ["claude-3-7-sonnet-20250219", "openai/gpt-5-codex"]
+      },
+      "temperature": 0.5,
+      "permission": {
+        "read": { "*": "allow" },
+        "write": { "**/*.test.ts": "allow", "**/*.spec.ts": "allow", "test/**": "allow", "*": "deny" },
+        "bash": { "bun test*": "allow", "npm test*": "allow", "*": "deny" }
+      }
+    },
+
+    "code-reviewer": {
+      "mode": "subagent",
+      "description": "Thorough code review",
+      "model": {
+        "primary": "claude-opus-4-6",
+        "fallback": ["openai/gpt-5.2", "claude-3-7-sonnet-20250219"]
+      },
+      "temperature": 0.3,
+      "permission": {
+        "read": { "*": "allow" },
+        "write": { "code-review-*.md": "allow", "*": "deny" },
+        "bash": { "git diff*": "allow", "git log*": "allow", "*": "deny" }
+      }
+    },
+
+    "perf-analyzer": {
+      "mode": "subagent",
+      "description": "Performance analysis and optimization",
+      "model": {
+        "primary": "claude-3-7-sonnet-20250219",
+        "fallback": ["openai/gpt-4o", "google/gemini-2.5-pro"]
+      },
+      "temperature": 0.4,
+      "permission": {
+        "read": { "*": "allow" },
+        "write": { "perf-report-*.md": "allow", "*": "deny" },
+        "bash": { "time*": "allow", "benchmark*": "allow", "*": "deny" }
+      }
+    },
+
+    "doc-writer": {
+      "mode": "subagent",
+      "description": "Write and update documentation",
+      "model": {
+        "primary": "openai/gpt-4o",
+        "fallback": ["claude-3-7-sonnet-20250219", "google/gemini-2.5-pro"]
+      },
+      "temperature": 0.8,
+      "permission": {
+        "read": { "*": "allow" },
+        "write": { "**/*.md": "allow", "docs/**": "allow", "*": "deny" },
+        "edit": { "**/*.md": "allow", "docs/**": "allow", "*": "deny" },
+        "bash": { "*": "deny" }
+      }
+    },
+
+    "refactor-agent": {
+      "mode": "subagent",
+      "description": "Code refactoring specialist",
+      "model": {
+        "primary": "openai/gpt-5.1-codex",
+        "fallback": ["claude-3-7-sonnet-20250219", "openai/gpt-5-codex"]
+      },
+      "temperature": 0.4,
+      "permission": {
+        "read": { "*": "allow" },
+        "write": { "*": "ask" },
+        "edit": { "*": "ask" },
+        "bash": { "bun test*": "allow", "*": "deny" }
+      }
+    },
+
+    "api-designer": {
+      "mode": "subagent",
+      "description": "Design and implement API routes",
+      "model": {
+        "primary": "claude-3-7-sonnet-20250219",
+        "fallback": ["openai/gpt-4o", "google/gemini-2.5-pro"]
+      },
+      "temperature": 0.5,
+      "permission": {
+        "read": { "*": "allow" },
+        "write": { "**/*api*.ts": "allow", "**/*route*.ts": "allow", "*": "deny" },
+        "edit": { "**/*api*.ts": "allow", "**/*route*.ts": "allow", "*": "deny" },
+        "bash": { "curl*": "allow", "*": "deny" }
+      }
+    }
+  },
+
+  "modelFallback": {
+    "enabled": true,
+    "strategy": "auto",
+    "retryAttempts": 3,
+    "retryDelay": 1000,
+    "timeoutMs": 30000,
+    "errorHandling": {
+      "rate_limit": "use_backup_immediately",
+      "timeout": "retry_then_fallback",
+      "api_error": "fallback_immediately",
+      "invalid_request": "no_fallback"
+    }
+  },
+
+  "costOptimization": {
+    "enabled": true,
+    "strategy": "balanced",
+    "budgetPerDay": 50.0,
+    "alertThreshold": 0.8,
+    "preferCheaperModels": {
+      "forTaskTypes": ["quick_tasks", "planning", "routing"],
+      "costThreshold": 5.0
+    }
+  },
+
+  "modelRegistry": {
+    "autoUpdate": true,
+    "updateInterval": 3600000,
+    "registryFile": ".seycode/model-registry.json",
+    "fallbackToRegistry": true
+  }
+}
