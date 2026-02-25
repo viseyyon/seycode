@@ -473,7 +473,7 @@ export const GithubRunCommand = cmd({
           ? (payload as IssueCommentEvent | IssuesEvent).issue.number
           : (payload as PullRequestEvent | PullRequestReviewCommentEvent).pull_request.number
       const runUrl = `/${owner}/${repo}/actions/runs/${runId}`
-      const shareBaseUrl = isMock ? "https://dev.seycode.ai" : "https://opencode.ai"
+      const shareBaseUrl = isMock ? "https://dev.seycode.ai" : "https://seycode.ai"
 
       let appToken: string
       let octoRest: Octokit

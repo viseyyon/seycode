@@ -45,7 +45,7 @@ export const UpgradeCommand = {
     const target = args.target ? args.target.replace(/^v/, "") : await Installation.latest()
 
     if (Installation.VERSION === target) {
-      prompts.log.warn(`opencode upgrade skipped: ${target} is already installed`)
+      prompts.log.warn(`sey upgrade skipped: ${target} is already installed`)
       prompts.outro("Done")
       return
     }

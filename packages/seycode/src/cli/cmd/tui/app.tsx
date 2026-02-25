@@ -555,7 +555,7 @@ function App() {
       title: "Open docs",
       value: "docs.open",
       onSelect: () => {
-        open("https://opencode.ai/docs").catch(() => {})
+        open("https://seycode.ai/docs").catch(() => {})
         dialog.clear()
       },
       category: "System",
@@ -662,7 +662,7 @@ function App() {
         DialogAlert.show(
           dialog,
           "Warning",
-          "While openrouter is a convenient way to access LLMs your request will often be routed to subpar providers that do not work well in our testing.\n\nFor reliable access to models check out OpenCode Zen\nhttps://opencode.ai/zen",
+          "While openrouter is a convenient way to access LLMs your request will often be routed to subpar providers that do not work well in our testing.\n\nFor reliable access to models check out SeyCode Zen\nhttps://seycode.ai/zen",
         ).then(() => kv.set("openrouter_warning", true))
       })
     }
@@ -724,7 +724,7 @@ function App() {
     toast.show({
       variant: "info",
       title: "Update Available",
-      message: `OpenCode v${evt.properties.version} is available. Run 'opencode upgrade' to update manually.`,
+      message: `OpenCode v${evt.properties.version} is available. Run 'sey upgrade' to update manually.`,
       duration: 10000,
     })
   })
