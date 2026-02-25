@@ -24,11 +24,12 @@ Complete guide to all SeyCode documentation.
 
 ### Configuration & Commands
 
-| Document | Description | Status |
-|----------|-------------|--------|
-| Configuration Reference | All config options | ⏳ In GETTING_STARTED.md |
-| Command Reference | CLI commands | ⏳ In GETTING_STARTED.md |
-| Keyboard Shortcuts | TUI/UI shortcuts | ⏳ In GETTING_STARTED.md |
+| Document | Description | Lines | Status |
+|----------|-------------|-------|--------|
+| [PROVIDER_SETUP.md](./PROVIDER_SETUP.md) | Complete provider configuration guide | 800+ | ✅ Complete |
+| Configuration Reference | All config options | - | ⏳ In GETTING_STARTED.md |
+| Command Reference | CLI commands | - | ⏳ In GETTING_STARTED.md |
+| Keyboard Shortcuts | TUI/UI shortcuts | - | ⏳ In GETTING_STARTED.md |
 
 ## 💻 Developer Documentation
 
