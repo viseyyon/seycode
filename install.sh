@@ -140,52 +140,75 @@ fi
 echo ""
 
 # Install dependencies
-printf "${BLUE}Installing dependencies (this may take a minute)...${NC}\n"
-printf "${YELLOW}Showing verbose output for transparency...${NC}\n"
+printf "${BLUE}Installing dependencies (this may take 2-3 minutes)...${NC}\n"
+printf "${YELLOW}This will download ~3800 packages. Please be patient...${NC}\n"
 cd "$TEMP_DIR"
 
-# Run bun install with verbose output
+# Run bun install with filtered output (only show important messages)
 echo ""
-echo "--- Installation Log ---"
-if bun install --verbose 2>&1 | tee /tmp/seycode-install.log; then
-    echo "--- End of Installation Log ---"
-    echo ""
-    printf "${GREEN}✓ Dependencies installed successfully${NC}\n"
+printf "${YELLOW}Progress: ${NC}"
 
-    # Show summary
-    PACKAGE_COUNT=$(grep -o "[0-9]* packages installed" /tmp/seycode-install.log 2>/dev/null | head -1 || echo "packages")
+# Save full log but only show summary
+if timeout 600 bun install > /tmp/seycode-install.log 2>&1; then
+    # Show summary from log
+    echo ""
+    echo ""
+
+    # Extract key info
+    PACKAGE_COUNT=$(grep -o "[0-9]* packages installed" /tmp/seycode-install.log 2>/dev/null | tail -1)
+    INSTALL_TIME=$(grep -o "\[[0-9.]*s\]" /tmp/seycode-install.log 2>/dev/null | tail -1)
+
+    printf "${GREEN}✓ Dependencies installed successfully${NC}\n"
     if [ -n "$PACKAGE_COUNT" ]; then
-        printf "${GREEN}  $PACKAGE_COUNT${NC}\n"
+        printf "${GREEN}  $PACKAGE_COUNT $INSTALL_TIME${NC}\n"
     fi
+
+    # Show warnings if any
+    WARNINGS=$(grep -c "^warn:" /tmp/seycode-install.log 2>/dev/null || echo "0")
+    if [ "$WARNINGS" -gt 0 ]; then
+        printf "${YELLOW}  ($WARNINGS warnings - check /tmp/seycode-install.log)${NC}\n"
+    fi
+
+    # Clean up log on success
+    rm -f /tmp/seycode-install.log 2>/dev/null
 else
     INSTALL_EXIT_CODE=$?
-    echo "--- End of Installation Log ---"
     echo ""
-    printf "${RED}✗ Failed to install dependencies (exit code: $INSTALL_EXIT_CODE)${NC}\n"
+    echo ""
+
+    # Check if it was a timeout
+    if [ $INSTALL_EXIT_CODE -eq 124 ]; then
+        printf "${RED}✗ Installation timed out after 10 minutes${NC}\n"
+        echo ""
+        printf "${YELLOW}This usually means:${NC}\n"
+        echo "  - Very slow network connection"
+        echo "  - npm registry issues"
+        echo "  - Firewall blocking connections"
+    else
+        printf "${RED}✗ Failed to install dependencies (exit code: $INSTALL_EXIT_CODE)${NC}\n"
+    fi
+
     echo ""
     printf "${YELLOW}Debug Information:${NC}\n"
     echo "  - Temp directory: $TEMP_DIR"
     echo "  - Bun version: $(bun --version 2>/dev/null || echo 'not found')"
     echo "  - Node modules: $(du -sh $TEMP_DIR/node_modules 2>/dev/null | cut -f1 || echo 'not created')"
-    echo "  - Install log: /tmp/seycode-install.log"
+    echo "  - Full log saved: /tmp/seycode-install.log"
     echo ""
-    printf "${YELLOW}Common issues:${NC}\n"
-    echo "  - Network connectivity problems"
-    echo "  - Workspace dependency conflicts"
-    echo "  - Insufficient disk space"
-    echo "  - npm registry issues"
+
+    # Show last few lines of log
+    printf "${YELLOW}Last 10 lines of installation log:${NC}\n"
+    tail -10 /tmp/seycode-install.log 2>/dev/null || echo "Log not available"
     echo ""
-    printf "${YELLOW}Try:${NC}\n"
+
+    printf "${YELLOW}Troubleshooting:${NC}\n"
     echo "  1. Check network: curl -I https://registry.npmjs.org/"
-    echo "  2. Check disk space: df -h"
+    echo "  2. Check firewall/proxy settings"
     echo "  3. View full log: cat /tmp/seycode-install.log"
-    echo "  4. Retry installation"
+    echo "  4. Retry with: curl -fsSL https://raw.githubusercontent.com/viseyyon/seycode/dev/install.sh | bash"
     echo ""
     exit 1
 fi
-
-# Clean up log on success
-rm -f /tmp/seycode-install.log 2>/dev/null
 
 echo ""
 
