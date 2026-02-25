@@ -8,8 +8,9 @@ Complete guide to all SeyCode documentation.
 
 1. **[GETTING_STARTED.md](./GETTING_STARTED.md)** - Installation and first steps
 2. **[QUICK_START_MODELS.md](./QUICK_START_MODELS.md)** - Multi-model setup in 5 minutes
-3. **[README.md](./README.md)** - Project overview and quick reference
-4. **[SEYCODE.md](./SEYCODE.md)** - Marketing overview and killer features
+3. **[DATABASES_SUMMARY.md](./DATABASES_SUMMARY.md)** - Auto-updating databases overview
+4. **[README.md](./README.md)** - Project overview and quick reference
+5. **[SEYCODE.md](./SEYCODE.md)** - Marketing overview and killer features
 
 ## 👤 User Documentation
 
