@@ -102,19 +102,41 @@ echo ""
 
 # Install dependencies
 printf "${BLUE}Installing dependencies (this may take a minute)...${NC}\n"
+printf "${YELLOW}Showing verbose output...${NC}\n"
 cd "$REPO_ROOT"
 
 echo ""
-if bun install; then
+echo "--- Installation Log ---"
+if bun install --verbose 2>&1 | tee /tmp/seycode-install-local.log; then
+    echo "--- End of Installation Log ---"
     echo ""
-    printf "${GREEN}✓ Dependencies installed${NC}\n"
+    printf "${GREEN}✓ Dependencies installed successfully${NC}\n"
+
+    # Show summary
+    PACKAGE_COUNT=$(grep -o "[0-9]* packages installed" /tmp/seycode-install-local.log 2>/dev/null | head -1 || echo "packages")
+    if [ -n "$PACKAGE_COUNT" ]; then
+        printf "${GREEN}  $PACKAGE_COUNT${NC}\n"
+    fi
+
+    # Clean up log
+    rm -f /tmp/seycode-install-local.log 2>/dev/null
 else
+    INSTALL_EXIT_CODE=$?
+    echo "--- End of Installation Log ---"
     echo ""
-    printf "${RED}✗ Failed to install dependencies${NC}\n"
+    printf "${RED}✗ Failed to install dependencies (exit code: $INSTALL_EXIT_CODE)${NC}\n"
     echo ""
-    echo "Debug info:"
+    printf "${YELLOW}Debug Information:${NC}\n"
     echo "  - Repository: $REPO_ROOT"
     echo "  - Bun version: $(bun --version 2>/dev/null || echo 'not found')"
+    echo "  - Node modules: $(du -sh $REPO_ROOT/node_modules 2>/dev/null | cut -f1 || echo 'not created')"
+    echo "  - Install log: /tmp/seycode-install-local.log"
+    echo ""
+    printf "${YELLOW}Try:${NC}\n"
+    echo "  1. Remove node_modules: rm -rf $REPO_ROOT/node_modules"
+    echo "  2. Remove lockfile: rm -f $REPO_ROOT/bun.lock"
+    echo "  3. Retry: bun install"
+    echo "  4. View log: cat /tmp/seycode-install-local.log"
     echo ""
     exit 1
 fi

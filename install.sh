@@ -29,13 +29,33 @@ echo "  Installing SeyCode"
 echo "======================================"
 echo ""
 
-# Check for existing installation
+# Check for existing installation and conflicts
+CONFLICTS_FOUND=0
+
 if [ -d "$HOME/.seycode" ]; then
-    printf "${YELLOW}⚠ Existing SeyCode installation found${NC}\n"
-    printf "${YELLOW}  Removing old installation...${NC}\n"
-    rm -rf "$HOME/.seycode"
-    rm -f "$HOME/.local/bin/sey" "$HOME/bin/sey" 2>/dev/null
+    printf "${YELLOW}⚠ Existing SeyCode installation found at ~/.seycode${NC}\n"
+    CONFLICTS_FOUND=1
+fi
+
+if [ -f "$HOME/.local/bin/sey" ] || [ -f "$HOME/bin/sey" ]; then
+    printf "${YELLOW}⚠ Existing 'sey' command found${NC}\n"
+    CONFLICTS_FOUND=1
+fi
+
+if [ $CONFLICTS_FOUND -eq 1 ]; then
+    printf "${YELLOW}  Automatically removing old installation...${NC}\n"
+
+    # Remove old installation
+    rm -rf "$HOME/.seycode" 2>/dev/null
+    rm -f "$HOME/.local/bin/sey" 2>/dev/null
+    rm -f "$HOME/bin/sey" 2>/dev/null
+    rm -f "$HOME/.seycode/bin/sey" 2>/dev/null
+
+    # Remove any cached data
+    rm -rf "$HOME/.cache/seycode" 2>/dev/null
+
     printf "${GREEN}✓ Removed old installation${NC}\n"
+    printf "${GREEN}  Starting fresh installation...${NC}\n"
     echo ""
 fi
 
@@ -121,27 +141,51 @@ echo ""
 
 # Install dependencies
 printf "${BLUE}Installing dependencies (this may take a minute)...${NC}\n"
+printf "${YELLOW}Showing verbose output for transparency...${NC}\n"
 cd "$TEMP_DIR"
 
-# Run bun install with visible output
+# Run bun install with verbose output
 echo ""
-if bun install; then
+echo "--- Installation Log ---"
+if bun install --verbose 2>&1 | tee /tmp/seycode-install.log; then
+    echo "--- End of Installation Log ---"
     echo ""
-    printf "${GREEN}✓ Dependencies installed${NC}\n"
+    printf "${GREEN}✓ Dependencies installed successfully${NC}\n"
+
+    # Show summary
+    PACKAGE_COUNT=$(grep -o "[0-9]* packages installed" /tmp/seycode-install.log 2>/dev/null | head -1 || echo "packages")
+    if [ -n "$PACKAGE_COUNT" ]; then
+        printf "${GREEN}  $PACKAGE_COUNT${NC}\n"
+    fi
 else
+    INSTALL_EXIT_CODE=$?
+    echo "--- End of Installation Log ---"
     echo ""
-    printf "${RED}✗ Failed to install dependencies${NC}\n"
+    printf "${RED}✗ Failed to install dependencies (exit code: $INSTALL_EXIT_CODE)${NC}\n"
     echo ""
-    echo "This might be due to:"
-    echo "  - Network issues"
-    echo "  - Workspace dependency conflicts"
-    echo ""
-    echo "Debug info:"
+    printf "${YELLOW}Debug Information:${NC}\n"
     echo "  - Temp directory: $TEMP_DIR"
     echo "  - Bun version: $(bun --version 2>/dev/null || echo 'not found')"
+    echo "  - Node modules: $(du -sh $TEMP_DIR/node_modules 2>/dev/null | cut -f1 || echo 'not created')"
+    echo "  - Install log: /tmp/seycode-install.log"
+    echo ""
+    printf "${YELLOW}Common issues:${NC}\n"
+    echo "  - Network connectivity problems"
+    echo "  - Workspace dependency conflicts"
+    echo "  - Insufficient disk space"
+    echo "  - npm registry issues"
+    echo ""
+    printf "${YELLOW}Try:${NC}\n"
+    echo "  1. Check network: curl -I https://registry.npmjs.org/"
+    echo "  2. Check disk space: df -h"
+    echo "  3. View full log: cat /tmp/seycode-install.log"
+    echo "  4. Retry installation"
     echo ""
     exit 1
 fi
+
+# Clean up log on success
+rm -f /tmp/seycode-install.log 2>/dev/null
 
 echo ""
 
