@@ -154,7 +154,8 @@ export namespace Provider {
       return {
         autoload: false,
         async getModel(sdk: any, modelID: string, _options?: Record<string, any>) {
-          return sdk.responses(modelID)
+          if (sdk.responses === undefined && sdk.chat === undefined) return sdk.languageModel(modelID)
+          return sdk.chat ? sdk.chat(modelID) : sdk.languageModel(modelID)
         },
         options: {},
       }
