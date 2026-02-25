@@ -113,6 +113,7 @@ cd "$REPO_ROOT"
 echo ""
 
 # Run with timeout and show live output
+set -o pipefail
 if timeout 600 bun install 2>&1 | tee /tmp/seycode-install-local.log; then
     echo ""
 

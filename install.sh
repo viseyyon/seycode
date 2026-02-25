@@ -169,6 +169,7 @@ cd "$TEMP_DIR"
 echo ""
 
 # Show live output while saving log
+set -o pipefail
 if timeout 600 bun install 2>&1 | tee /tmp/seycode-install.log; then
     echo ""
 
