@@ -38,7 +38,7 @@ This regenerates:
 ### Regenerate After Database Changes
 ```bash
 cd packages/seycode
-bun run db generate  # Generate Drizzle schema
+sey run db generate  # Generate Drizzle schema
 cd ../..
 ./script/generate.ts  # Regenerate SDK
 ```
@@ -50,12 +50,12 @@ After regeneration, check:
 1. **SDK builds successfully**:
 ```bash
 cd packages/sdk/js
-bun run build
+sey run build
 ```
 
 2. **Types are correct**:
 ```bash
-bun typecheck
+sey typecheck
 ```
 
 3. **No errors in generated files**:
@@ -89,7 +89,7 @@ git diff packages/sdk/
 - Verify Zod schemas are valid
 
 **Types don't match?**
-- Run `bun typecheck` to find mismatches
+- Run `sey typecheck` to find mismatches
 - Check if tool parameters changed
 - Verify API route signatures
 
@@ -102,8 +102,8 @@ git diff packages/sdk/
 Typical workflow:
 1. Make changes to server code
 2. Run `./script/generate.ts`
-3. Run `bun typecheck` to verify
-4. Test with `bun dev`
-5. Run tests: `cd packages/seycode && bun test`
+3. Run `sey typecheck` to verify
+4. Test with `sey dev`
+5. Run tests: `cd packages/seycode && sey test`
 
 $ARGUMENTS

@@ -231,16 +231,16 @@ Time saved: 4.8 min per use
 
 ```bash
 # First time setup
-bun install
+sey install
 
 # Run TUI in development mode
-bun dev
+sey dev
 
 # Run headless server (for web/desktop development)
-bun dev serve
+sey dev serve
 
 # In another terminal, run web UI
-bun run --cwd packages/app dev
+sey run --cwd packages/app dev
 ```
 
 ## Default Skills & Agents
@@ -695,7 +695,7 @@ Beyond skills, you can create persistent custom agents in `opencode.json`.
       "permission": {
         "read": { "*": "allow" },
         "write": { "test/**": "allow", "*": "deny" },
-        "bash": { "cd * && bun test*": "allow", "*": "deny" }
+        "bash": { "cd * && sey test*": "allow", "*": "deny" }
       }
     }
   }
@@ -792,11 +792,11 @@ Don't wait to be asked. If you see an opportunity to use a skill, use it:
 
 ## When to Use What
 
-- **`bun dev`** - Default for CLI/TUI development (runs in packages/seycode by default)
-- **`bun dev <directory>`** - Run against specific directory
-- **`bun dev .`** - Run SeyCode on itself (the repo root)
-- **`bun dev serve`** - Start headless server (for web/desktop UI development)
-- **`bun dev spawn`** - Debug server code with breakpoints (avoids worker thread issues)
+- **`sey dev`** - Default for CLI/TUI development (runs in packages/seycode by default)
+- **`sey dev <directory>`** - Run against specific directory
+- **`sey dev .`** - Run SeyCode on itself (the repo root)
+- **`sey dev serve`** - Start headless server (for web/desktop UI development)
+- **`sey dev spawn`** - Debug server code with breakpoints (avoids worker thread issues)
 - **`opencode attach http://localhost:4096`** - Connect TUI to existing server
 
 ## Development Commands
@@ -805,20 +805,20 @@ Don't wait to be asked. If you see an opportunity to use a skill, use it:
 
 ```bash
 # Install dependencies
-bun install
+sey install
 
 # Run SeyCode in development mode
-bun dev
+sey dev
 
 # Run against a different directory
-bun dev <directory>
+sey dev <directory>
 
 # Start headless API server
-bun dev serve
-bun dev serve --port 8080  # Custom port
+sey dev serve
+sey dev serve --port 8080  # Custom port
 
 # Run type checking across all packages
-bun typecheck
+sey typecheck
 ```
 
 ### Building and Testing
@@ -829,7 +829,7 @@ bun typecheck
 
 # Run tests (from package directories, NOT from root)
 cd packages/seycode
-bun test --timeout 30000
+sey test --timeout 30000
 
 # Regenerate JavaScript SDK
 ./packages/sdk/js/script/build.ts
@@ -842,14 +842,14 @@ bun test --timeout 30000
 
 ```bash
 # Web app (requires server running first)
-bun run --cwd packages/app dev
+sey run --cwd packages/app dev
 
 # Desktop app (Tauri - requires Rust toolchain and platform-specific libraries)
-bun run --cwd packages/desktop tauri dev
-bun run --cwd packages/desktop tauri build  # Production build
+sey run --cwd packages/desktop tauri dev
+sey run --cwd packages/desktop tauri build  # Production build
 
 # Desktop web dev server only (no native shell)
-bun run --cwd packages/desktop dev
+sey run --cwd packages/desktop dev
 ```
 
 ## Common Development Workflows
@@ -902,13 +902,13 @@ bun run --inspect=ws://localhost:6499/ --cwd packages/seycode --conditions=brows
 ```bash
 # Run tests for specific package (NOT from root)
 cd packages/seycode
-bun test --timeout 30000
+sey test --timeout 30000
 
 # Run specific test file
-bun test test/session.test.ts
+sey test test/session.test.ts
 
 # Run with coverage
-bun test --coverage
+sey test --coverage
 ```
 
 **Testing principles** (from AGENTS.md):
@@ -922,7 +922,7 @@ bun test --coverage
 
 ```bash
 # Use spawn to avoid worker thread issues
-bun dev spawn
+sey dev spawn
 
 # Or debug server separately
 bun run --inspect=ws://localhost:6499/ --cwd packages/seycode ./src/index.ts serve --port 4096
@@ -945,7 +945,7 @@ See `.vscode/settings.example.json` and `.vscode/launch.example.json` for debug 
 ## Common Issues
 
 - **"do not run tests from root" error**: Run tests from package directories (`cd packages/seycode`), not repo root
-- **Breakpoints not working**: Use `bun dev spawn` or debug server separately with `--inspect`
+- **Breakpoints not working**: Use `sey dev spawn` or debug server separately with `--inspect`
 - **Desktop app won't build**: Install Tauri prerequisites - see [Tauri docs](https://v2.tauri.app/start/prerequisites/)
 - **Port 4096 already in use**: Specify different port with `--port` flag
 - **Changes to server.ts not reflected**: Run `./script/generate.ts` to regenerate SDK

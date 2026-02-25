@@ -64,7 +64,7 @@ brew install your-language-server
 3. **Test the server**:
 ```bash
 # Start SeyCode
-bun dev
+sey dev
 
 # Open a file with the extension
 # LSP should start automatically

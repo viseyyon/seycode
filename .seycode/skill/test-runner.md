@@ -19,25 +19,25 @@ Run tests for the SeyCode codebase following project conventions.
 ### Run all tests in a package
 ```bash
 cd packages/seycode
-bun test --timeout 30000
+sey test --timeout 30000
 ```
 
 ### Run specific test file
 ```bash
 cd packages/seycode
-bun test test/session.test.ts --timeout 30000
+sey test test/session.test.ts --timeout 30000
 ```
 
 ### Run tests matching pattern
 ```bash
 cd packages/seycode
-bun test --timeout 30000 test/tool/
+sey test --timeout 30000 test/tool/
 ```
 
 ### Run with coverage
 ```bash
 cd packages/seycode
-bun test --coverage --timeout 30000
+sey test --coverage --timeout 30000
 ```
 
 ## Test Files by Area
@@ -59,19 +59,19 @@ Common test areas:
 **Changed a tool?**
 ```bash
 cd packages/seycode
-bun test test/tool/$(basename your-tool).test.ts
+sey test test/tool/$(basename your-tool).test.ts
 ```
 
 **Changed server routes?**
 ```bash
 cd packages/seycode
-bun test test/server/
+sey test test/server/
 ```
 
 **Changed agent system?**
 ```bash
 cd packages/seycode
-bun test test/agent/
+sey test test/agent/
 ```
 
 ## Creating New Tests
@@ -97,7 +97,7 @@ test("tool executes correctly", async () => {
 Check test status:
 ```bash
 cd packages/seycode
-bun test --timeout 30000 2>&1 | tee test-results.txt
+sey test --timeout 30000 2>&1 | tee test-results.txt
 ```
 
 $ARGUMENTS

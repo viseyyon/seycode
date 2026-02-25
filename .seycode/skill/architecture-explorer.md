@@ -99,7 +99,7 @@ Config loads from multiple sources with clear ordering (see CLAUDE.md)
 7. Response → Client
 
 ### Project Initialization Flow
-1. User runs `bun dev <directory>`
+1. User runs `sey dev <directory>`
 2. Project detection (`.git/` lookup)
 3. Generate/load project ID
 4. Initialize instance state

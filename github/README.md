@@ -129,7 +129,7 @@ To test locally:
    - `GITHUB_RUN_ID`: Dummy value to emulate GitHub action environment.
    - `MOCK_TOKEN`: A GitHub personal access token. This token is used to verify you have `admin` or `write` access to the test repo. Generate a token [here](https://github.com/settings/personal-access-tokens).
    - `MOCK_EVENT`: Mock GitHub event payload (see templates below).
-   - `/path/to/seycode`: Path to your cloned seycode repo. `bun /path/to/seycode/github/index.ts` runs your local version of `seycode`.
+   - `/path/to/seycode`: Path to your cloned seycode repo. `sey /path/to/seycode/github/index.ts` runs your local version of `seycode`.
 
 ### Issue comment event
 

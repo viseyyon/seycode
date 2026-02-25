@@ -14,7 +14,7 @@ export OPENAI_API_KEY="sk-..."
 export GOOGLE_GENERATIVE_AI_API_KEY="..."
 
 # 3. Start SeyCode
-bun dev
+sey dev
 
 # Done! You now have:
 # ✅ Latest models from all providers
@@ -320,7 +320,7 @@ echo $GOOGLE_GENERATIVE_AI_API_KEY | head -c 20
 cat .seycode/model-registry.json | jq '.version'
 
 # 4. Start SeyCode
-bun dev
+sey dev
 ```
 
 ### Test Fallback
@@ -369,7 +369,7 @@ SeyCode will try primary, then fall back to backups if needed.
 
 - [ ] Copied optimized config to `.seycode/seycode.json`
 - [ ] Set at least 2 provider API keys
-- [ ] Started SeyCode with `bun dev`
+- [ ] Started SeyCode with `sey dev`
 - [ ] Tested by asking a question
 - [ ] Verified which model is being used
 - [ ] Checked fallback is working

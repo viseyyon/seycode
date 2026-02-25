@@ -51,20 +51,20 @@ git clone https://github.com/viseyyon/seycode.git
 cd seycode
 
 # 3. Install dependencies
-bun install
+sey install
 
-# 4. Build the project
-bun run build
+# 4. Install 'sey' command globally (optional but recommended)
+./scripts/install-sey.sh
 
 # 5. Run SeyCode
-bun dev
+sey dev
 ```
 
 ### Option 2: Global Installation
 
 ```bash
 # Install SeyCode globally
-bun install -g seycode
+sey install -g seycode
 
 # Run from anywhere
 seycode
@@ -78,13 +78,13 @@ git clone https://github.com/viseyyon/seycode.git
 cd seycode
 
 # Install dependencies
-bun install
+sey install
 
 # Run in development mode
-bun dev
+sey dev
 
 # Or run against a specific directory
-bun dev /path/to/your/project
+sey dev /path/to/your/project
 ```
 
 ---
@@ -165,14 +165,14 @@ EOF
 
 ```bash
 # Check Bun version
-bun --version
+sey --version
 
 # Check SeyCode can start
 cd /path/to/seycode
-bun dev --help
+sey dev --help
 
 # Test with a simple command
-bun dev
+sey dev
 ```
 
 You should see the SeyCode TUI (Terminal User Interface) start up.
@@ -190,7 +190,7 @@ cd /path/to/your/project
 # Start SeyCode
 seycode  # if installed globally
 # OR
-bun dev  # from SeyCode directory
+sey dev  # from SeyCode directory
 ```
 
 ### TUI (Terminal User Interface)
@@ -441,22 +441,22 @@ These run automatically without invocation:
 
 ```bash
 # TUI mode (default)
-bun dev
+sey dev
 
 # TUI on specific directory
-bun dev /path/to/project
+sey dev /path/to/project
 
 # Server mode (for web/desktop UI)
-bun dev serve
+sey dev serve
 
 # Server on custom port
-bun dev serve --port 8080
+sey dev serve --port 8080
 
 # Attach TUI to existing server
 seycode attach http://localhost:4096
 
 # Debug mode with breakpoints
-bun dev spawn
+sey dev spawn
 ```
 
 ### 4. Custom Configuration
@@ -636,7 +636,7 @@ lsof -i :4096
 kill -9 <PID>
 
 # Or use different port
-bun dev serve --port 8080
+sey dev serve --port 8080
 ```
 
 ### Issue: "Model not responding"
@@ -662,7 +662,7 @@ curl https://api.anthropic.com/v1/messages \
 export NODE_OPTIONS="--max-old-space-size=4096"
 
 # Restart SeyCode
-bun dev
+sey dev
 ```
 
 ### Issue: "Tests failing from root"
@@ -673,10 +673,10 @@ bun dev
 # Always run from package directories
 
 cd packages/seycode
-bun test
+sey test
 
 # Not from root:
-# bun test  # ❌ Will fail
+# sey test  # ❌ Will fail
 ```
 
 ### Issue: "Breakpoints not working"
@@ -684,7 +684,7 @@ bun test
 **Solution:**
 ```bash
 # Use spawn mode for debugging
-bun dev spawn
+sey dev spawn
 
 # Or debug server separately
 bun run --inspect=ws://localhost:6499/ --cwd packages/seycode ./src/index.ts serve
@@ -766,7 +766,7 @@ chmod -R 755 .seycode/
 # SeyCode automatically compacts context when needed
 
 # Focus on specific directories
-bun dev src/  # Only work on src/ directory
+sey dev src/  # Only work on src/ directory
 ```
 
 ### 4. Parallel Execution
@@ -822,7 +822,7 @@ vim .seycode/skill/my-workflow.md
 
 | Command | Purpose |
 |---------|---------|
-| `bun dev` | Start SeyCode |
+| `sey dev` | Start SeyCode |
 | `@workflow-orchestrator` | Get optimal workflow |
 | `@architecture-explorer` | Understand codebase |
 | `@test-runner` | Run tests |
@@ -864,7 +864,7 @@ vim .seycode/skill/my-workflow.md
 
 ```bash
 # Include these details:
-- SeyCode version: bun --version
+- SeyCode version: sey --version
 - Operating system
 - Error message
 - Steps to reproduce
@@ -879,9 +879,9 @@ vim .seycode/skill/my-workflow.md
 ```bash
 curl -fsSL https://bun.sh/install | bash
 git clone https://github.com/viseyyon/seycode.git
-cd seycode && bun install
+cd seycode && sey install
 export ANTHROPIC_API_KEY="sk-ant-..."
-bun dev
+sey dev
 ```
 
 **First command**: Start with workflow orchestrator

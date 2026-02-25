@@ -107,7 +107,7 @@ brew install seycode
 npm install -g seycode
 
 # Using bun
-bun install -g seycode
+sey install -g seycode
 
 # Using pnpm
 pnpm install -g seycode
@@ -144,11 +144,11 @@ git clone https://github.com/viseyyon/seycode.git
 cd seycode
 
 # Install dependencies
-bun install
+sey install
 
 # Build
 cd packages/seycode
-bun run build
+sey run build
 
 # Run
 ./bin/seycode

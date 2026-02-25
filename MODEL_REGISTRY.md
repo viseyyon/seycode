@@ -43,7 +43,7 @@ export OPENROUTER_API_KEY="sk-or-..."
 ### 3. Start Using
 
 ```bash
-bun dev
+sey dev
 
 # SeyCode will automatically:
 # - Use the best model for each task
@@ -553,7 +553,7 @@ Maximum availability:
 
 ```bash
 # View current session
-bun dev
+sey dev
 
 # In SeyCode, ask:
 "Which model are you using?"
@@ -784,7 +784,7 @@ export GOOGLE_GENERATIVE_AI_API_KEY="..."
 
 **Step 3**: Test it
 ```bash
-bun dev
+sey dev
 # Try various tasks to see different models in action
 ```
 

@@ -51,7 +51,7 @@ Create a new tool for SeyCode following the established patterns.
 5. **Test the tool**:
    ```bash
    cd packages/seycode
-   bun test test/tool/your-tool.test.ts
+   sey test test/tool/your-tool.test.ts
    ```
 
 6. **Document the tool**: If it's a major tool, add usage notes to CLAUDE.md

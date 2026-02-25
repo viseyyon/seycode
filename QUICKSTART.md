@@ -64,10 +64,10 @@ git clone https://github.com/viseyyon/seycode.git
 cd seycode
 
 # Install dependencies
-bun install
+sey install
 
-# Build (optional for first run)
-# bun run build
+# Install 'sey' command globally (optional but recommended)
+./scripts/install-sey.sh
 ```
 
 ---
@@ -76,10 +76,10 @@ bun install
 
 ```bash
 # Start in current directory
-bun dev
+sey dev
 
 # Or start in your project
-bun dev /path/to/your/project
+sey dev /path/to/your/project
 ```
 
 You should see the SeyCode TUI (Terminal User Interface) start up!
@@ -165,7 +165,7 @@ curl -fsSL https://bun.sh/install | bash
 
 ### "Port already in use"
 ```bash
-bun dev serve --port 8080  # Use different port
+sey dev serve --port 8080  # Use different port
 ```
 
 ---

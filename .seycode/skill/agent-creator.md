@@ -70,8 +70,8 @@ Create or configure an SeyCode agent with specific behaviors and permissions.
     "mode": "subagent",
     "permission": {
       "bash": {
-        "cd * && bun test*": "allow",
-        "bun test*": "allow",
+        "cd * && sey test*": "allow",
+        "sey test*": "allow",
         "*": "deny"
       }
     }

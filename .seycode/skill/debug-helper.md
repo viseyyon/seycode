@@ -20,7 +20,7 @@ seycode attach http://localhost:4096
 
 ### Debug with Spawn (Avoid Worker Thread Issues)
 ```bash
-bun dev spawn
+sey dev spawn
 ```
 
 ### Debug TUI Separately
@@ -59,7 +59,7 @@ cp .vscode/launch.example.json .vscode/launch.json
 
 ### Debugging Tool Execution
 1. Set breakpoint in `packages/seycode/src/tool/builtin/your-tool.ts`
-2. Start with `bun dev spawn`
+2. Start with `sey dev spawn`
 3. Invoke tool from TUI
 4. Breakpoint hits
 
@@ -93,14 +93,14 @@ Key files to set breakpoints:
 ## Debugging Tips
 
 1. **Use `console.log` liberally** - Shows in terminal immediately
-2. **Check logs** - Server logs show in terminal running `bun dev serve`
+2. **Check logs** - Server logs show in terminal running `sey dev serve`
 3. **Use `why-is-node-running`** - Debug hanging processes
 4. **Check event bus** - Many bugs are event timing issues
 
 ## Troubleshooting
 
 **Breakpoints not hitting?**
-- Use `bun dev spawn` instead of `bun dev`
+- Use `sey dev spawn` instead of `sey dev`
 - Ensure using attach configuration, not launch
 - Check file paths match exactly
 

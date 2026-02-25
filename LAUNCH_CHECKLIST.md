@@ -78,7 +78,7 @@ gh auth login
 - [ ] Verify badges
 
 **3. Basic Smoke Testing** (Recommended)
-- [ ] Verify code compiles (if Bun available): `cd packages/seycode && bun run build`
+- [ ] Verify code compiles (if Bun available): `cd packages/seycode && sey run build`
 - [ ] Check for critical syntax errors: `grep -r "syntax error" packages/seycode/src/ || echo "No syntax errors found"`
 - [ ] Verify configuration files are valid JSON: `python3 -m json.tool .seycode/seycode.json > /dev/null && echo "Config valid"`
 

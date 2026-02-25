@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# SeyCode CLI wrapper
+# This script wraps bun commands to provide a consistent 'sey' CLI experience
+
+set -euo pipefail
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# Check if bun is installed
+if ! command -v bun &> /dev/null; then
+    echo -e "${RED}Error: Bun is not installed${NC}"
+    echo ""
+    echo "SeyCode requires Bun to run. Install it with:"
+    echo ""
+    echo -e "${GREEN}curl -fsSL https://bun.sh/install | bash${NC}"
+    echo ""
+    exit 1
+fi
+
+# If no arguments provided, show help
+if [ $# -eq 0 ]; then
+    echo "SeyCode CLI - AI Coding Agent"
+    echo ""
+    echo "Usage: sey <command> [options]"
+    echo ""
+    echo "Commands:"
+    echo "  dev [path]          Start SeyCode in development mode"
+    echo "  dev serve           Start headless server"
+    echo "  dev spawn           Start server with debugging"
+    echo "  install             Install dependencies"
+    echo "  test                Run tests"
+    echo "  build               Build the project"
+    echo "  typecheck           Run type checking"
+    echo "  --version, -v       Show version"
+    echo "  --help, -h          Show this help"
+    echo ""
+    echo "Examples:"
+    echo "  sey dev                    # Start SeyCode"
+    echo "  sey dev /path/to/project   # Start in specific directory"
+    echo "  sey install                # Install dependencies"
+    echo "  sey test                   # Run tests"
+    echo ""
+    exit 0
+fi
+
+# Handle help and version flags
+case "${1:-}" in
+    --help|-h)
+        exec "$0"
+        ;;
+    --version|-v)
+        bun --version
+        exit 0
+        ;;
+esac
+
+# Pass all arguments to bun
+exec bun "$@"

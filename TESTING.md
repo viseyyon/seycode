@@ -61,13 +61,13 @@ SeyCode follows a pragmatic testing philosophy:
 **Unit & Integration Tests:**
 - **Bun Test**: Built-in testing framework
   ```bash
-  bun test
+  sey test
   ```
 
 **E2E Tests:**
 - **Playwright**: Browser automation and testing
   ```bash
-  cd packages/app && bun playwright test
+  cd packages/app && sey playwright test
   ```
 
 ### Test Locations
@@ -101,7 +101,7 @@ packages/
   ```json
   {
     "scripts": {
-      "test": "bun test --timeout 30000"
+      "test": "sey test --timeout 30000"
     }
   }
   ```
@@ -134,11 +134,11 @@ export default defineConfig({
 ```bash
 # ❌ WRONG - Will fail
 cd /path/to/seycode
-bun test
+sey test
 
 # ✅ CORRECT - Run from package directory
 cd /path/to/seycode/packages/seycode
-bun test
+sey test
 ```
 
 ### Unit & Integration Tests
@@ -146,31 +146,31 @@ bun test
 **Run all tests in a package:**
 ```bash
 cd packages/seycode
-bun test --timeout 30000
+sey test --timeout 30000
 ```
 
 **Run specific test file:**
 ```bash
 cd packages/seycode
-bun test test/session.test.ts
+sey test test/session.test.ts
 ```
 
 **Run tests matching pattern:**
 ```bash
 cd packages/seycode
-bun test --test-name-pattern="session.*create"
+sey test --test-name-pattern="session.*create"
 ```
 
 **Run with coverage:**
 ```bash
 cd packages/seycode
-bun test --coverage
+sey test --coverage
 ```
 
 **Watch mode:**
 ```bash
 cd packages/seycode
-bun test --watch
+sey test --watch
 ```
 
 ### E2E Tests
@@ -178,37 +178,37 @@ bun test --watch
 **Run all E2E tests:**
 ```bash
 cd packages/app
-bun playwright test
+sey playwright test
 ```
 
 **Run specific test:**
 ```bash
 cd packages/app
-bun playwright test e2e/session.test.ts
+sey playwright test e2e/session.test.ts
 ```
 
 **Run in headed mode (see browser):**
 ```bash
 cd packages/app
-bun playwright test --headed
+sey playwright test --headed
 ```
 
 **Run specific browser:**
 ```bash
 cd packages/app
-bun playwright test --project=chromium
+sey playwright test --project=chromium
 ```
 
 **Debug mode:**
 ```bash
 cd packages/app
-bun playwright test --debug
+sey playwright test --debug
 ```
 
 **View test report:**
 ```bash
 cd packages/app
-bun playwright show-report
+sey playwright show-report
 ```
 
 ### All Tests (CI-style)
@@ -218,9 +218,9 @@ bun playwright show-report
 bun run test:all
 
 # Or manually:
-cd packages/seycode && bun test
-cd packages/app && bun playwright test
-cd packages/sdk/js && bun test
+cd packages/seycode && sey test
+cd packages/app && sey playwright test
+cd packages/sdk/js && sey test
 # ... etc
 ```
 
@@ -811,7 +811,7 @@ describe('Skills', () => {
 
 ```bash
 cd packages/seycode
-bun test --coverage
+sey test --coverage
 ```
 
 ### Coverage Goals
@@ -826,7 +826,7 @@ bun test --coverage
 
 ```bash
 # Generate HTML report
-bun test --coverage --coverage-reporter=html
+sey test --coverage --coverage-reporter=html
 
 # Open in browser
 open coverage/index.html
@@ -919,9 +919,9 @@ jobs:
       - uses: actions/checkout@v3
       - uses: oven-sh/setup-bun@v1
 
-      - run: bun install
-      - run: cd packages/seycode && bun test
-      - run: cd packages/app && bun playwright test
+      - run: sey install
+      - run: cd packages/seycode && sey test
+      - run: cd packages/app && sey playwright test
 ```
 
 ---
@@ -934,13 +934,13 @@ jobs:
 ```bash
 # Solution: Run from package directory
 cd packages/seycode
-bun test
+sey test
 ```
 
 **Timeout errors**
 ```bash
 # Solution: Increase timeout
-bun test --timeout 60000
+sey test --timeout 60000
 ```
 
 **Database locked errors**

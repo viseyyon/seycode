@@ -27,7 +27,7 @@ export const yourTable = sqliteTable("your_table", {
 ### 2. Generate migration
 ```bash
 cd packages/seycode
-bun run db generate
+sey run db generate
 ```
 
 This creates a migration file in `migration/` directory.
@@ -46,7 +46,7 @@ Check that:
 Migrations apply automatically on next SeyCode start, or manually:
 ```bash
 cd packages/seycode
-bun run db push
+sey run db push
 ```
 
 ## Migration Commands
@@ -55,13 +55,13 @@ bun run db push
 cd packages/seycode
 
 # Generate migration from schema changes
-bun run db generate
+sey run db generate
 
 # Push schema directly to database (dev only)
-bun run db push
+sey run db push
 
 # Open Drizzle Studio (database GUI)
-bun run db studio
+sey run db studio
 ```
 
 ## Common Migration Patterns
@@ -125,7 +125,7 @@ export const message = sqliteTable("message", {
 ### Using Drizzle Studio
 ```bash
 cd packages/seycode
-bun run db studio
+sey run db studio
 # Opens web interface at http://localhost:4983
 ```
 

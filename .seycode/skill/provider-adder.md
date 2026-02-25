@@ -63,7 +63,7 @@ const modelMap = {
 export YOUR_PROVIDER_API_KEY="your-key"
 
 # Test with SeyCode
-bun dev
+sey dev
 
 # Select your provider in agent configuration
 ```
