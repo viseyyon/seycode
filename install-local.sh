@@ -111,11 +111,9 @@ printf "${YELLOW}Downloading ~3800 packages. Please wait...${NC}\n"
 cd "$REPO_ROOT"
 
 echo ""
-printf "${YELLOW}Progress: ${NC}"
 
-# Run with timeout and save log
-if timeout 600 bun install > /tmp/seycode-install-local.log 2>&1; then
-    echo ""
+# Run with timeout and show live output
+if timeout 600 bun install 2>&1 | tee /tmp/seycode-install-local.log; then
     echo ""
 
     # Extract summary
