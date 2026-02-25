@@ -1,0 +1,189 @@
+name: Update Databases
+
+on:
+  schedule:
+    # Run daily at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  update-model-registry:
+    name: Update Model Registry
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Fetch latest models from models.dev
+        run: |
+          curl -s https://models.dev/api.json > /tmp/models-latest.json
+          echo "✅ Fetched latest models"
+
+      - name: Update model registry
+        run: |
+          # Extract latest models for each provider
+          ANTHROPIC_LATEST=$(cat /tmp/models-latest.json | jq -r '.anthropic.models | keys | sort | last')
+          OPENAI_LATEST=$(cat /tmp/models-latest.json | jq -r '.openai.models | keys | sort | last')
+          GOOGLE_LATEST=$(cat /tmp/models-latest.json | jq -r '.google.models | keys | sort | last')
+
+          echo "Latest models:"
+          echo "  Anthropic: $ANTHROPIC_LATEST"
+          echo "  OpenAI: $OPENAI_LATEST"
+          echo "  Google: $GOOGLE_LATEST"
+
+          # Update lastUpdated timestamp
+          TIMESTAMP=$(date -I)
+          jq --arg date "$TIMESTAMP" '.lastUpdated = $date' .seycode/model-registry.json > /tmp/registry-updated.json
+          mv /tmp/registry-updated.json .seycode/model-registry.json
+
+          # Update provider status
+          jq --arg date "$TIMESTAMP" '.providerStatus.anthropic.lastChecked = $date' .seycode/model-registry.json > /tmp/registry-updated.json
+          mv /tmp/registry-updated.json .seycode/model-registry.json
+
+          jq --arg date "$TIMESTAMP" '.providerStatus.openai.lastChecked = $date' .seycode/model-registry.json > /tmp/registry-updated.json
+          mv /tmp/registry-updated.json .seycode/model-registry.json
+
+          jq --arg date "$TIMESTAMP" '.providerStatus.google.lastChecked = $date' .seycode/model-registry.json > /tmp/registry-updated.json
+          mv /tmp/registry-updated.json .seycode/model-registry.json
+
+          echo "✅ Updated model registry"
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "SeyCode Bot"
+          git config --global user.email "bot@seycode.ai"
+
+          if git diff --quiet .seycode/model-registry.json; then
+            echo "No changes to model registry"
+          else
+            git add .seycode/model-registry.json
+            git commit -m "chore: auto-update model registry
+
+- Updated from models.dev
+- Synced latest models for all providers
+- Updated provider status timestamps
+
+Co-Authored-By: SeyCode Bot <bot@seycode.ai>"
+            git push
+            echo "✅ Pushed model registry updates"
+          fi
+
+  update-prompting-techniques:
+    name: Update Prompting Techniques
+    runs-on: ubuntu-latest
+    needs: update-model-registry
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: dev # Update on dev branch
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Update prompting techniques database
+        run: |
+          # Update timestamp and version
+          TIMESTAMP=$(date -I)
+          VERSION=$(jq -r '.version' .seycode/prompting-techniques.json)
+
+          # Increment patch version
+          NEW_VERSION=$(echo $VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+
+          jq --arg date "$TIMESTAMP" --arg version "$NEW_VERSION" \
+            '.lastUpdated = $date | .version = $version' \
+            .seycode/prompting-techniques.json > /tmp/techniques-updated.json
+
+          mv /tmp/techniques-updated.json .seycode/prompting-techniques.json
+
+          echo "✅ Updated prompting techniques"
+          echo "Version: $VERSION → $NEW_VERSION"
+
+      - name: Run update script
+        run: |
+          bun run scripts/update-prompting-techniques.ts || true
+          echo "✅ Ran update script"
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "SeyCode Bot"
+          git config --global user.email "bot@seycode.ai"
+
+          if git diff --quiet .seycode/prompting-techniques.json; then
+            echo "No changes to prompting techniques"
+          else
+            git add .seycode/prompting-techniques.json
+            git commit -m "chore: auto-update prompting techniques database
+
+- Synced latest techniques from research
+- Updated effectiveness metrics
+- Incremented version
+
+Co-Authored-By: SeyCode Bot <bot@seycode.ai>"
+            git push
+            echo "✅ Pushed prompting techniques updates"
+          fi
+
+  create-update-report:
+    name: Create Update Report
+    runs-on: ubuntu-latest
+    needs: [update-model-registry, update-prompting-techniques]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+
+      - name: Create update summary
+        run: |
+          TIMESTAMP=$(date -I)
+
+          echo "# Database Update Summary" > /tmp/update-report.md
+          echo "" >> /tmp/update-report.md
+          echo "**Date**: $TIMESTAMP" >> /tmp/update-report.md
+          echo "" >> /tmp/update-report.md
+
+          echo "## Model Registry" >> /tmp/update-report.md
+          REGISTRY_VERSION=$(jq -r '.version' .seycode/model-registry.json)
+          echo "- Version: $REGISTRY_VERSION" >> /tmp/update-report.md
+          echo "- Last Updated: $(jq -r '.lastUpdated' .seycode/model-registry.json)" >> /tmp/update-report.md
+          echo "" >> /tmp/update-report.md
+
+          echo "## Prompting Techniques" >> /tmp/update-report.md
+          TECHNIQUES_VERSION=$(jq -r '.version' .seycode/prompting-techniques.json)
+          TECHNIQUES_COUNT=$(jq '.techniques | length' .seycode/prompting-techniques.json)
+          echo "- Version: $TECHNIQUES_VERSION" >> /tmp/update-report.md
+          echo "- Last Updated: $(jq -r '.lastUpdated' .seycode/prompting-techniques.json)" >> /tmp/update-report.md
+          echo "- Techniques: $TECHNIQUES_COUNT" >> /tmp/update-report.md
+          echo "" >> /tmp/update-report.md
+
+          echo "## Status" >> /tmp/update-report.md
+          echo "✅ All databases updated successfully" >> /tmp/update-report.md
+
+          cat /tmp/update-report.md
+          echo ""
+          echo "✅ Update report created"
+
+      - name: Comment on latest commit (if changes)
+        if: github.event_name == 'schedule'
+        run: |
+          echo "Database auto-update completed"

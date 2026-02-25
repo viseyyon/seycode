@@ -29,6 +29,7 @@ Complete guide to all SeyCode documentation.
 |----------|-------------|-------|--------|
 | [PROVIDER_SETUP.md](./PROVIDER_SETUP.md) | Complete provider configuration guide | 800+ | ✅ Complete |
 | [MODEL_REGISTRY.md](./MODEL_REGISTRY.md) | Multi-model fallback & registry system | 1,000+ | ✅ Complete |
+| [PROMPTING_TECHNIQUES.md](./PROMPTING_TECHNIQUES.md) | Prompt engineering database & techniques | 1,200+ | ✅ Complete |
 | Configuration Reference | All config options | - | ⏳ In GETTING_STARTED.md |
 | Command Reference | CLI commands | - | ⏳ In GETTING_STARTED.md |
 | Keyboard Shortcuts | TUI/UI shortcuts | - | ⏳ In GETTING_STARTED.md |

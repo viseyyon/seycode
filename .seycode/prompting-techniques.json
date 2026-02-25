@@ -1,0 +1,509 @@
+{
+  "$schema": "./prompting-techniques-schema.json",
+  "version": "2.0.0",
+  "lastUpdated": "2026-02-25",
+  "updateInterval": 86400000,
+  "source": "https://github.com/viseyyon/seycode",
+
+  "techniques": {
+    "zero_shot": {
+      "name": "Zero-Shot Prompting",
+      "category": "basic",
+      "description": "Direct instruction without examples",
+      "effectiveness": 0.6,
+      "useCases": ["simple_tasks", "well_defined_tasks"],
+      "template": "{instruction}",
+      "example": "Write a function that adds two numbers",
+      "whenToUse": "Simple, well-defined tasks",
+      "bestModels": ["claude-sonnet", "gpt-4o"]
+    },
+
+    "few_shot": {
+      "name": "Few-Shot Prompting",
+      "category": "basic",
+      "description": "Provide examples to guide the model",
+      "effectiveness": 0.8,
+      "useCases": ["pattern_learning", "format_specific_tasks"],
+      "template": "Examples:\n{examples}\n\nNow do: {task}",
+      "example": "Example 1: add(2,3) = 5\nExample 2: add(5,7) = 12\nNow: add(10,15)",
+      "whenToUse": "When you want specific format or style",
+      "bestModels": ["claude-sonnet", "gpt-4o", "gemini-pro"]
+    },
+
+    "chain_of_thought": {
+      "name": "Chain-of-Thought (CoT)",
+      "category": "reasoning",
+      "description": "Ask model to think step-by-step",
+      "effectiveness": 0.9,
+      "useCases": ["complex_reasoning", "multi_step_problems"],
+      "template": "{task}\n\nLet's think step by step:",
+      "example": "Solve this bug. Let's think step by step:\n1. First, understand the error\n2. Identify the root cause\n3. Propose a fix",
+      "whenToUse": "Complex problems requiring reasoning",
+      "bestModels": ["claude-opus", "gpt-5", "claude-sonnet"]
+    },
+
+    "tree_of_thought": {
+      "name": "Tree-of-Thought (ToT)",
+      "category": "reasoning",
+      "description": "Explore multiple reasoning paths",
+      "effectiveness": 0.95,
+      "useCases": ["complex_problems", "multiple_solutions"],
+      "template": "{task}\n\nExplore multiple approaches:\nApproach 1: {path1}\nApproach 2: {path2}\nEvaluate and choose best",
+      "example": "Design this system. Explore multiple approaches and choose the best one",
+      "whenToUse": "When multiple solutions possible",
+      "bestModels": ["claude-opus", "gpt-5"]
+    },
+
+    "self_consistency": {
+      "name": "Self-Consistency",
+      "category": "reasoning",
+      "description": "Generate multiple solutions and aggregate",
+      "effectiveness": 0.92,
+      "useCases": ["accuracy_critical", "complex_reasoning"],
+      "template": "Solve this problem 3 different ways and compare results: {task}",
+      "example": "Calculate this 3 different ways to verify accuracy",
+      "whenToUse": "When accuracy is critical",
+      "bestModels": ["claude-opus", "gpt-5", "gpt-4o"]
+    },
+
+    "least_to_most": {
+      "name": "Least-to-Most Prompting",
+      "category": "decomposition",
+      "description": "Break complex tasks into simpler subtasks",
+      "effectiveness": 0.88,
+      "useCases": ["complex_tasks", "hierarchical_problems"],
+      "template": "First, break this into subtasks:\n{task}\n\nNow solve each subtask",
+      "example": "Build a REST API. First break it into: routing, handlers, validation, etc.",
+      "whenToUse": "Complex tasks that can be decomposed",
+      "bestModels": ["claude-opus", "claude-sonnet", "gpt-4o"]
+    },
+
+    "role_prompting": {
+      "name": "Role Prompting",
+      "category": "context",
+      "description": "Assign a specific role/persona to the model",
+      "effectiveness": 0.85,
+      "useCases": ["domain_specific", "expertise_required"],
+      "template": "You are a {role}. {task}",
+      "example": "You are a senior security engineer. Review this code for vulnerabilities",
+      "whenToUse": "Need domain-specific expertise",
+      "bestModels": ["claude-opus", "gpt-4o", "claude-sonnet"]
+    },
+
+    "task_decomposition": {
+      "name": "Task Decomposition",
+      "category": "decomposition",
+      "description": "Break down into sequential steps",
+      "effectiveness": 0.87,
+      "useCases": ["multi_step_tasks", "workflows"],
+      "template": "Break this into steps:\n{task}\n\nStep 1: ...\nStep 2: ...",
+      "example": "Add authentication:\n1. Create user model\n2. Add auth middleware\n3. Implement login/logout\n4. Add tests",
+      "whenToUse": "Multi-step workflows",
+      "bestModels": ["claude-sonnet", "gpt-4o"]
+    },
+
+    "meta_prompting": {
+      "name": "Meta-Prompting",
+      "category": "advanced",
+      "description": "Ask model to improve the prompt itself",
+      "effectiveness": 0.9,
+      "useCases": ["prompt_optimization", "unclear_requirements"],
+      "template": "Given this task: {task}\n\nWhat would be a better way to ask this question?",
+      "example": "I want to optimize performance. What specific information should I provide?",
+      "whenToUse": "Unclear how to phrase the request",
+      "bestModels": ["claude-opus", "gpt-5", "claude-sonnet"]
+    },
+
+    "maieutic_prompting": {
+      "name": "Maieutic Prompting",
+      "category": "reasoning",
+      "description": "Recursive explanation and verification",
+      "effectiveness": 0.91,
+      "useCases": ["logical_reasoning", "verification"],
+      "template": "{task}\n\nExplain your reasoning. Then verify each step.",
+      "example": "Solve this algorithm problem. Explain each step and verify it's correct",
+      "whenToUse": "Need verified reasoning",
+      "bestModels": ["claude-opus", "gpt-5"]
+    },
+
+    "directional_stimulus": {
+      "name": "Directional Stimulus Prompting",
+      "category": "guidance",
+      "description": "Provide hints or direction",
+      "effectiveness": 0.84,
+      "useCases": ["guided_generation", "specific_direction"],
+      "template": "{task}\n\nHint: Consider {hint}",
+      "example": "Optimize this code. Hint: Look for redundant database calls",
+      "whenToUse": "Want to guide without being prescriptive",
+      "bestModels": ["claude-sonnet", "gpt-4o"]
+    },
+
+    "active_prompting": {
+      "name": "Active Prompting",
+      "category": "adaptive",
+      "description": "Adapt prompts based on uncertainty",
+      "effectiveness": 0.89,
+      "useCases": ["uncertain_tasks", "adaptive_workflow"],
+      "template": "{task}\n\nIf uncertain, ask clarifying questions",
+      "example": "Build a feature. Ask questions if requirements are unclear",
+      "whenToUse": "Unclear or evolving requirements",
+      "bestModels": ["claude-opus", "claude-sonnet", "gpt-4o"]
+    },
+
+    "reflexion": {
+      "name": "Reflexion",
+      "category": "self_improvement",
+      "description": "Self-reflect and improve based on feedback",
+      "effectiveness": 0.93,
+      "useCases": ["iterative_improvement", "learning"],
+      "template": "{task}\n\nAfter completing, reflect: What could be improved?",
+      "example": "Write code, then analyze: What are the weaknesses? How to improve?",
+      "whenToUse": "Iterative improvement needed",
+      "bestModels": ["claude-opus", "gpt-5", "claude-sonnet"]
+    },
+
+    "generated_knowledge": {
+      "name": "Generated Knowledge Prompting",
+      "category": "knowledge",
+      "description": "Generate relevant knowledge first, then use it",
+      "effectiveness": 0.86,
+      "useCases": ["knowledge_intensive", "research_tasks"],
+      "template": "First, what do we know about {topic}?\n\nNow use that to: {task}",
+      "example": "What are best practices for API design? Now design an API following those",
+      "whenToUse": "Need to recall/generate relevant knowledge",
+      "bestModels": ["claude-opus", "gpt-4o", "gemini-pro"]
+    },
+
+    "automatic_reasoning": {
+      "name": "Automatic Reasoning and Tool-use (ART)",
+      "category": "tool_use",
+      "description": "Combine reasoning with tool selection",
+      "effectiveness": 0.94,
+      "useCases": ["multi_tool_tasks", "complex_workflows"],
+      "template": "{task}\n\nAvailable tools: {tools}\nSelect and use appropriate tools",
+      "example": "Analyze this codebase using: @architecture-explorer, @code-reviewer, @perf-analyzer",
+      "whenToUse": "Multiple tools available",
+      "bestModels": ["claude-opus", "claude-sonnet", "gpt-4o"]
+    },
+
+    "react_prompting": {
+      "name": "ReAct (Reasoning + Acting)",
+      "category": "tool_use",
+      "description": "Interleave reasoning with actions",
+      "effectiveness": 0.92,
+      "useCases": ["agent_tasks", "interactive_workflows"],
+      "template": "Thought: {reasoning}\nAction: {action}\nObservation: {result}\nThought: ...",
+      "example": "Debug: Think -> Run test -> Observe error -> Think -> Fix -> Test",
+      "whenToUse": "Interactive problem-solving",
+      "bestModels": ["claude-opus", "claude-sonnet", "gpt-4o"]
+    },
+
+    "emotion_prompting": {
+      "name": "Emotion Prompting",
+      "category": "enhancement",
+      "description": "Add urgency or importance to task",
+      "effectiveness": 0.78,
+      "useCases": ["motivation", "emphasis"],
+      "template": "This is critical: {task}",
+      "example": "This is a production bug affecting users. Fix it carefully and thoroughly",
+      "whenToUse": "Emphasize importance",
+      "bestModels": ["claude-opus", "claude-sonnet"]
+    },
+
+    "contrastive_prompting": {
+      "name": "Contrastive Prompting",
+      "category": "guidance",
+      "description": "Show what to do AND what not to do",
+      "effectiveness": 0.83,
+      "useCases": ["avoiding_mistakes", "specific_requirements"],
+      "template": "Do: {positive_example}\nDon't: {negative_example}\n\nNow: {task}",
+      "example": "Do: Use descriptive variable names\nDon't: Use single letters\nRefactor this code",
+      "whenToUse": "Want to avoid common mistakes",
+      "bestModels": ["claude-sonnet", "gpt-4o"]
+    },
+
+    "retrieval_augmented": {
+      "name": "Retrieval-Augmented Generation (RAG)",
+      "category": "knowledge",
+      "description": "Retrieve relevant context first",
+      "effectiveness": 0.91,
+      "useCases": ["codebase_context", "documentation"],
+      "template": "Context: {retrieved_context}\n\nUsing this context: {task}",
+      "example": "Here's the existing auth code: {...}\nNow add OAuth support following the same pattern",
+      "whenToUse": "Need codebase/domain context",
+      "bestModels": ["claude-opus", "claude-sonnet", "gpt-4o"]
+    },
+
+    "multi_modal_prompting": {
+      "name": "Multi-Modal Prompting",
+      "category": "multi_modal",
+      "description": "Combine text with images/diagrams",
+      "effectiveness": 0.88,
+      "useCases": ["visual_tasks", "diagrams", "ui_design"],
+      "template": "Here's a diagram: {image}\n\nBased on this: {task}",
+      "example": "Here's a wireframe. Implement this UI component",
+      "whenToUse": "Visual context helps",
+      "bestModels": ["gpt-4o", "gemini-pro", "claude-opus"]
+    }
+  },
+
+  "taskTypeMapping": {
+    "code_generation": {
+      "recommended": ["task_decomposition", "few_shot", "role_prompting"],
+      "template": "You are an expert {language} developer.\n\nTask: {task}\n\nSteps:\n1. Understand requirements\n2. Design structure\n3. Implement code\n4. Add error handling\n5. Write tests",
+      "effectiveness": 0.88
+    },
+
+    "debugging": {
+      "recommended": ["chain_of_thought", "reflexion", "react_prompting"],
+      "template": "Debug this issue systematically:\n\n1. Understand the error\n2. Reproduce it\n3. Identify root cause\n4. Propose fix\n5. Verify fix\n6. Reflect: Could this happen elsewhere?",
+      "effectiveness": 0.91
+    },
+
+    "code_review": {
+      "recommended": ["role_prompting", "contrastive_prompting", "self_consistency"],
+      "template": "You are a senior code reviewer.\n\nReview for:\n- ✅ Code quality\n- ✅ Security\n- ✅ Performance\n- ✅ Maintainability\n\n❌ Don't just list issues\n✅ Provide specific improvements",
+      "effectiveness": 0.89
+    },
+
+    "architecture_design": {
+      "recommended": ["tree_of_thought", "least_to_most", "generated_knowledge"],
+      "template": "Design {system} architecture:\n\n1. What are best practices for {domain}?\n2. Explore multiple approaches\n3. Evaluate trade-offs\n4. Choose best approach\n5. Document decisions",
+      "effectiveness": 0.92
+    },
+
+    "refactoring": {
+      "recommended": ["contrastive_prompting", "reflexion", "task_decomposition"],
+      "template": "Refactor {code}:\n\n❌ Current issues:\n{issues}\n\n✅ Target state:\n{goals}\n\nSteps:\n1. Identify patterns\n2. Extract common logic\n3. Improve naming\n4. Verify behavior unchanged",
+      "effectiveness": 0.87
+    },
+
+    "testing": {
+      "recommended": ["few_shot", "task_decomposition", "self_consistency"],
+      "template": "Generate comprehensive tests:\n\n1. Unit tests (core logic)\n2. Integration tests (interactions)\n3. Edge cases\n4. Error cases\n\nExample test format:\n{example_test}",
+      "effectiveness": 0.85
+    },
+
+    "security_audit": {
+      "recommended": ["role_prompting", "chain_of_thought", "self_consistency"],
+      "template": "You are a security expert. Audit {code} for:\n\n1. OWASP Top 10 vulnerabilities\n2. Authentication/Authorization flaws\n3. Input validation issues\n4. Data exposure risks\n\nThink step-by-step for each category",
+      "effectiveness": 0.93
+    },
+
+    "performance_optimization": {
+      "recommended": ["chain_of_thought", "directional_stimulus", "reflexion"],
+      "template": "Optimize {code} performance:\n\n1. Profile and identify bottlenecks\n2. For each bottleneck, consider:\n   - Algorithm optimization\n   - Caching opportunities\n   - Database query optimization\n   - Parallelization\n3. Implement improvements\n4. Verify impact",
+      "effectiveness": 0.86
+    },
+
+    "documentation": {
+      "recommended": ["role_prompting", "generated_knowledge", "few_shot"],
+      "template": "You are a technical writer.\n\nDocument {code}:\n\n1. Overview (what it does)\n2. Usage (how to use)\n3. Parameters (what they mean)\n4. Examples (common use cases)\n5. Edge cases (what to watch for)\n\nStyle: Clear, concise, helpful",
+      "effectiveness": 0.84
+    },
+
+    "api_design": {
+      "recommended": ["generated_knowledge", "contrastive_prompting", "tree_of_thought"],
+      "template": "Design {api}:\n\n1. What are REST API best practices?\n2. Explore approaches:\n   - RESTful\n   - GraphQL\n   - RPC\n3. Choose best for {use_case}\n4. Design endpoints\n\n✅ Do: Consistent naming, proper HTTP methods\n❌ Don't: Expose internals, break conventions",
+      "effectiveness": 0.88
+    }
+  },
+
+  "compositionPatterns": {
+    "sequential": {
+      "description": "Apply techniques in sequence",
+      "pattern": "technique1 → technique2 → technique3",
+      "example": "role_prompting → task_decomposition → chain_of_thought",
+      "effectiveness": 0.92
+    },
+
+    "parallel": {
+      "description": "Apply techniques simultaneously",
+      "pattern": "(technique1 + technique2) → aggregate",
+      "example": "(self_consistency + tree_of_thought) → compare results",
+      "effectiveness": 0.94
+    },
+
+    "hierarchical": {
+      "description": "Nested technique application",
+      "pattern": "outer(inner(task))",
+      "example": "reflexion(chain_of_thought(task_decomposition(task)))",
+      "effectiveness": 0.95
+    },
+
+    "adaptive": {
+      "description": "Choose technique based on context",
+      "pattern": "if (condition) then technique1 else technique2",
+      "example": "if complex: chain_of_thought else zero_shot",
+      "effectiveness": 0.89
+    }
+  },
+
+  "enhancementRules": {
+    "clarity": {
+      "description": "Make instructions crystal clear",
+      "rules": [
+        "Use specific verbs (analyze, implement, refactor)",
+        "Provide concrete examples",
+        "Define expected output format",
+        "Specify constraints and requirements"
+      ],
+      "impact": 0.85
+    },
+
+    "context": {
+      "description": "Provide relevant context",
+      "rules": [
+        "Include codebase context",
+        "Reference existing patterns",
+        "Explain why task is needed",
+        "Provide domain knowledge"
+      ],
+      "impact": 0.88
+    },
+
+    "structure": {
+      "description": "Well-structured prompts",
+      "rules": [
+        "Break into clear sections",
+        "Use numbered steps",
+        "Separate examples from instructions",
+        "Use formatting (bullets, headers)"
+      ],
+      "impact": 0.82
+    },
+
+    "constraints": {
+      "description": "Define boundaries",
+      "rules": [
+        "Specify what to include/exclude",
+        "Set quality requirements",
+        "Define time/resource constraints",
+        "Clarify scope"
+      ],
+      "impact": 0.86
+    },
+
+    "verification": {
+      "description": "Add verification steps",
+      "rules": [
+        "Ask for self-verification",
+        "Request test coverage",
+        "Require examples",
+        "Include quality checks"
+      ],
+      "impact": 0.87
+    }
+  },
+
+  "antiPatterns": {
+    "vague_instructions": {
+      "description": "Unclear what to do",
+      "bad": "Make this better",
+      "good": "Refactor this function to: 1) Improve naming 2) Extract helper methods 3) Add error handling",
+      "impact": -0.5
+    },
+
+    "missing_context": {
+      "description": "No background information",
+      "bad": "Fix this bug",
+      "good": "This authentication bug occurs when users try to login with OAuth. The error is {...}. Fix it while maintaining backward compatibility",
+      "impact": -0.4
+    },
+
+    "overloaded_prompt": {
+      "description": "Too many tasks at once",
+      "bad": "Implement feature X, write tests, update docs, refactor related code, optimize performance",
+      "good": "First, implement feature X following existing patterns. We'll handle tests and docs separately",
+      "impact": -0.45
+    },
+
+    "no_output_format": {
+      "description": "Unclear expected format",
+      "bad": "Review this code",
+      "good": "Review this code. Provide:\n1. Security issues (high/medium/low)\n2. Performance concerns\n3. Specific code fixes",
+      "impact": -0.35
+    },
+
+    "missing_examples": {
+      "description": "No examples when needed",
+      "bad": "Write tests in the project style",
+      "good": "Write tests following this pattern:\n```\ndescribe('feature', () => {\n  it('should...', () => {...})\n})\n```",
+      "impact": -0.4
+    }
+  },
+
+  "modelSpecificOptimizations": {
+    "claude": {
+      "strengths": ["code_quality", "reasoning", "following_instructions"],
+      "techniques": ["chain_of_thought", "task_decomposition", "role_prompting"],
+      "tips": [
+        "Provide clear structure",
+        "Use XML tags for complex prompts",
+        "Request step-by-step reasoning",
+        "Emphasize code quality and security"
+      ]
+    },
+
+    "gpt": {
+      "strengths": ["creativity", "code_generation", "versatility"],
+      "techniques": ["few_shot", "reflexion", "react_prompting"],
+      "tips": [
+        "Provide examples",
+        "Use system messages for role",
+        "Request creative solutions",
+        "Good for iterative refinement"
+      ]
+    },
+
+    "gemini": {
+      "strengths": ["multimodal", "large_context", "speed"],
+      "techniques": ["multi_modal_prompting", "retrieval_augmented", "zero_shot"],
+      "tips": [
+        "Use large context window",
+        "Include visual context when available",
+        "Good for quick tasks",
+        "Excellent for documentation analysis"
+      ]
+    }
+  },
+
+  "updateSources": [
+    {
+      "name": "Anthropic Prompt Library",
+      "url": "https://docs.anthropic.com/en/prompt-library",
+      "frequency": "weekly"
+    },
+    {
+      "name": "OpenAI Prompt Engineering Guide",
+      "url": "https://platform.openai.com/docs/guides/prompt-engineering",
+      "frequency": "weekly"
+    },
+    {
+      "name": "Google AI Prompting Best Practices",
+      "url": "https://ai.google.dev/docs/prompting_guide",
+      "frequency": "weekly"
+    },
+    {
+      "name": "Prompt Engineering Research Papers",
+      "url": "https://arxiv.org/search/?query=prompt+engineering",
+      "frequency": "monthly"
+    },
+    {
+      "name": "SeyCode Community Techniques",
+      "url": "https://github.com/viseyyon/seycode/discussions",
+      "frequency": "daily"
+    }
+  ],
+
+  "metrics": {
+    "effectivenessThreshold": 0.8,
+    "minUsageForInclusion": 10,
+    "updateCheckInterval": 86400000,
+    "qualityScore": {
+      "clarity": 0.3,
+      "effectiveness": 0.4,
+      "efficiency": 0.3
+    }
+  }
+}
