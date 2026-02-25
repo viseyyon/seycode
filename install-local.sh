@@ -101,13 +101,21 @@ fi
 echo ""
 
 # Install dependencies
-printf "${BLUE}Installing dependencies...${NC}\n"
+printf "${BLUE}Installing dependencies (this may take a minute)...${NC}\n"
 cd "$REPO_ROOT"
 
+echo ""
 if bun install; then
+    echo ""
     printf "${GREEN}✓ Dependencies installed${NC}\n"
 else
+    echo ""
     printf "${RED}✗ Failed to install dependencies${NC}\n"
+    echo ""
+    echo "Debug info:"
+    echo "  - Repository: $REPO_ROOT"
+    echo "  - Bun version: $(bun --version 2>/dev/null || echo 'not found')"
+    echo ""
     exit 1
 fi
 

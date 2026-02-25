@@ -29,6 +29,16 @@ echo "  Installing SeyCode"
 echo "======================================"
 echo ""
 
+# Check for existing installation
+if [ -d "$HOME/.seycode" ]; then
+    printf "${YELLOW}⚠ Existing SeyCode installation found${NC}\n"
+    printf "${YELLOW}  Removing old installation...${NC}\n"
+    rm -rf "$HOME/.seycode"
+    rm -f "$HOME/.local/bin/sey" "$HOME/bin/sey" 2>/dev/null
+    printf "${GREEN}✓ Removed old installation${NC}\n"
+    echo ""
+fi
+
 # Determine installation directory
 if [ -n "${SEYCODE_INSTALL_DIR:-}" ]; then
     INSTALL_DIR="$SEYCODE_INSTALL_DIR"
@@ -110,12 +120,26 @@ fi
 echo ""
 
 # Install dependencies
-printf "${BLUE}Installing dependencies...${NC}\n"
+printf "${BLUE}Installing dependencies (this may take a minute)...${NC}\n"
 cd "$TEMP_DIR"
-if bun install > /dev/null 2>&1; then
+
+# Run bun install with visible output
+echo ""
+if bun install; then
+    echo ""
     printf "${GREEN}✓ Dependencies installed${NC}\n"
 else
+    echo ""
     printf "${RED}✗ Failed to install dependencies${NC}\n"
+    echo ""
+    echo "This might be due to:"
+    echo "  - Network issues"
+    echo "  - Workspace dependency conflicts"
+    echo ""
+    echo "Debug info:"
+    echo "  - Temp directory: $TEMP_DIR"
+    echo "  - Bun version: $(bun --version 2>/dev/null || echo 'not found')"
+    echo ""
     exit 1
 fi
 
