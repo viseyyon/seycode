@@ -126,14 +126,35 @@ fi
 
 echo ""
 
+# Check if git is installed
+if ! command -v git &> /dev/null; then
+    printf "${RED}✗ Git is not installed${NC}\n"
+    echo ""
+    echo "Please install git first:"
+    echo "  Ubuntu/Debian: sudo apt-get install git"
+    echo "  CentOS/RHEL:   sudo yum install git"
+    echo "  macOS:         brew install git"
+    exit 1
+fi
+
 # Clone SeyCode repository
 printf "${BLUE}Downloading SeyCode...${NC}\n"
 TEMP_DIR=$(mktemp -d)
-if git clone --depth 1 --branch dev https://github.com/viseyyon/seycode.git "$TEMP_DIR" > /dev/null 2>&1; then
+if git clone --depth 1 --branch dev https://github.com/viseyyon/seycode.git "$TEMP_DIR" 2>/tmp/seycode-git-error.log; then
     printf "${GREEN}✓ Downloaded${NC}\n"
 else
     printf "${RED}✗ Failed to download SeyCode${NC}\n"
-    echo "Make sure you have access to: https://github.com/viseyyon/seycode"
+    echo ""
+    printf "${YELLOW}Error details:${NC}\n"
+    cat /tmp/seycode-git-error.log 2>/dev/null || echo "No error log available"
+    echo ""
+    echo "Common issues:"
+    echo "  - Network connectivity problems"
+    echo "  - Firewall blocking GitHub"
+    echo "  - Git not properly configured"
+    echo ""
+    echo "Repository URL: https://github.com/viseyyon/seycode"
+    echo "Branch: dev"
     exit 1
 fi
 

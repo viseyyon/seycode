@@ -100,6 +100,11 @@ fi
 
 echo ""
 
+# Check if git is installed (needed for some dependencies)
+if ! command -v git &> /dev/null; then
+    printf "${YELLOW}⚠ Git not found - some dependencies may need it${NC}\n"
+fi
+
 # Install dependencies
 printf "${BLUE}Installing dependencies (this may take 2-3 minutes)...${NC}\n"
 printf "${YELLOW}Downloading ~3800 packages. Please wait...${NC}\n"
