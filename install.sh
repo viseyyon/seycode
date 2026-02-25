@@ -165,14 +165,11 @@ printf "${BLUE}Installing dependencies (this may take 2-3 minutes)...${NC}\n"
 printf "${YELLOW}This will download ~3800 packages. Please be patient...${NC}\n"
 cd "$TEMP_DIR"
 
-# Run bun install with filtered output (only show important messages)
+# Run bun install with live output
 echo ""
-printf "${YELLOW}Progress: ${NC}"
 
-# Save full log but only show summary
-if timeout 600 bun install > /tmp/seycode-install.log 2>&1; then
-    # Show summary from log
-    echo ""
+# Show live output while saving log
+if timeout 600 bun install 2>&1 | tee /tmp/seycode-install.log; then
     echo ""
 
     # Extract key info
