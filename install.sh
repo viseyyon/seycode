@@ -4,18 +4,29 @@
 
 set -euo pipefail
 
-# Colors
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-RED='\033[0;31m'
-BLUE='\033[0;34m'
-BOLD='\033[1m'
-NC='\033[0m'
+# Check if terminal supports colors
+if [ -t 1 ] && command -v tput >/dev/null 2>&1 && [ "$(tput colors 2>/dev/null || echo 0)" -ge 8 ]; then
+    # Colors
+    GREEN='\033[0;32m'
+    YELLOW='\033[1;33m'
+    RED='\033[0;31m'
+    BLUE='\033[0;34m'
+    BOLD='\033[1m'
+    NC='\033[0m'
+else
+    # No colors
+    GREEN=''
+    YELLOW=''
+    RED=''
+    BLUE=''
+    BOLD=''
+    NC=''
+fi
 
 echo ""
-echo -e "${BOLD}======================================"
+echo "======================================"
 echo "  Installing SeyCode"
-echo "======================================${NC}"
+echo "======================================"
 echo ""
 
 # Determine installation directory
@@ -32,7 +43,7 @@ else
     mkdir -p "$INSTALL_DIR"
 fi
 
-echo -e "${BLUE}Installing to: $INSTALL_DIR${NC}"
+printf "${BLUE}Installing to: $INSTALL_DIR${NC}\n"
 echo ""
 
 # Detect OS and architecture
@@ -47,7 +58,7 @@ case "$OS" in
         OS_TYPE="linux"
         ;;
     *)
-        echo -e "${RED}✗ Unsupported operating system: $OS${NC}"
+        printf "${RED}✗ Unsupported operating system: $OS${NC}\n"
         exit 1
         ;;
 esac
@@ -60,38 +71,38 @@ case "$ARCH" in
         ARCH_TYPE="aarch64"
         ;;
     *)
-        echo -e "${RED}✗ Unsupported architecture: $ARCH${NC}"
+        printf "${RED}✗ Unsupported architecture: $ARCH${NC}\n"
         exit 1
         ;;
 esac
 
-echo -e "${GREEN}✓ Detected: $OS_TYPE-$ARCH_TYPE${NC}"
+printf "${GREEN}✓ Detected: $OS_TYPE-$ARCH_TYPE${NC}\n"
 echo ""
 
 # Install Bun runtime (silently, as a dependency)
-echo -e "${BLUE}Installing runtime...${NC}"
+printf "${BLUE}Installing runtime...${NC}\n"
 if ! command -v bun &> /dev/null; then
     if curl -fsSL https://bun.sh/install | bash > /dev/null 2>&1; then
-        echo -e "${GREEN}✓ Runtime installed${NC}"
+        printf "${GREEN}✓ Runtime installed${NC}\n"
         export PATH="$HOME/.bun/bin:$PATH"
     else
-        echo -e "${RED}✗ Failed to install runtime${NC}"
+        printf "${RED}✗ Failed to install runtime${NC}\n"
         exit 1
     fi
 else
-    echo -e "${GREEN}✓ Runtime available${NC}"
+    printf "${GREEN}✓ Runtime available${NC}\n"
     export PATH="$HOME/.bun/bin:$PATH"
 fi
 
 echo ""
 
 # Clone SeyCode repository
-echo -e "${BLUE}Downloading SeyCode...${NC}"
+printf "${BLUE}Downloading SeyCode...${NC}\n"
 TEMP_DIR=$(mktemp -d)
 if git clone --depth 1 --branch dev https://github.com/viseyyon/seycode.git "$TEMP_DIR" > /dev/null 2>&1; then
-    echo -e "${GREEN}✓ Downloaded${NC}"
+    printf "${GREEN}✓ Downloaded${NC}\n"
 else
-    echo -e "${RED}✗ Failed to download SeyCode${NC}"
+    printf "${RED}✗ Failed to download SeyCode${NC}\n"
     echo "Make sure you have access to: https://github.com/viseyyon/seycode"
     exit 1
 fi
@@ -99,25 +110,25 @@ fi
 echo ""
 
 # Install dependencies
-echo -e "${BLUE}Installing dependencies...${NC}"
+printf "${BLUE}Installing dependencies...${NC}\n"
 cd "$TEMP_DIR"
 if bun install > /dev/null 2>&1; then
-    echo -e "${GREEN}✓ Dependencies installed${NC}"
+    printf "${GREEN}✓ Dependencies installed${NC}\n"
 else
-    echo -e "${RED}✗ Failed to install dependencies${NC}"
+    printf "${RED}✗ Failed to install dependencies${NC}\n"
     exit 1
 fi
 
 echo ""
 
 # Install sey command
-echo -e "${BLUE}Installing 'sey' command...${NC}"
+printf "${BLUE}Installing 'sey' command...${NC}\n"
 if [ -f "$TEMP_DIR/sey" ]; then
     cp "$TEMP_DIR/sey" "$INSTALL_DIR/sey"
     chmod +x "$INSTALL_DIR/sey"
-    echo -e "${GREEN}✓ Installed 'sey' command${NC}"
+    printf "${GREEN}✓ Installed 'sey' command${NC}\n"
 else
-    echo -e "${RED}✗ sey command not found${NC}"
+    printf "${RED}✗ sey command not found${NC}\n"
     exit 1
 fi
 
@@ -125,15 +136,15 @@ echo ""
 
 # Install SeyCode to ~/.seycode
 SEYCODE_HOME="$HOME/.seycode"
-echo -e "${BLUE}Installing SeyCode to $SEYCODE_HOME...${NC}"
+printf "${BLUE}Installing SeyCode to $SEYCODE_HOME...${NC}\n"
 rm -rf "$SEYCODE_HOME"
 mv "$TEMP_DIR" "$SEYCODE_HOME"
-echo -e "${GREEN}✓ SeyCode installed${NC}"
+printf "${GREEN}✓ SeyCode installed${NC}\n"
 
 echo ""
 
 # Configure PATH
-echo -e "${BLUE}Configuring environment...${NC}"
+printf "${BLUE}Configuring environment...${NC}\n"
 
 # Detect shell
 if [ -n "${BASH_VERSION:-}" ]; then
@@ -153,36 +164,36 @@ if ! grep -q "SEYCODE" "$SHELL_RC" 2>/dev/null; then
     echo "" >> "$SHELL_RC"
     echo "# SeyCode" >> "$SHELL_RC"
     echo "export PATH=\"$INSTALL_DIR:\$PATH\"" >> "$SHELL_RC"
-    echo -e "${GREEN}✓ Added to $SHELL_RC${NC}"
+    printf "${GREEN}✓ Added to $SHELL_RC${NC}\n"
 else
-    echo -e "${GREEN}✓ Already configured in $SHELL_RC${NC}"
+    printf "${GREEN}✓ Already configured in $SHELL_RC${NC}\n"
 fi
 
 echo ""
-echo -e "${BOLD}======================================"
-echo -e "${GREEN}✓ SeyCode Installed Successfully!${NC}"
-echo -e "${BOLD}======================================${NC}"
+echo "======================================"
+printf "${GREEN}✓ SeyCode Installed Successfully!${NC}\n"
+echo "======================================"
 echo ""
-echo -e "${BOLD}Next Steps:${NC}"
+printf "${BOLD}Next Steps:${NC}\n"
 echo ""
-echo "  ${YELLOW}1.${NC} Restart your terminal or run:"
-echo "     ${GREEN}source $SHELL_RC${NC}"
+printf "  ${YELLOW}1.${NC} Restart your terminal or run:\n"
+printf "     ${GREEN}source $SHELL_RC${NC}\n"
 echo ""
-echo "  ${YELLOW}2.${NC} Get an API key from Anthropic:"
-echo "     ${BLUE}https://console.anthropic.com/${NC}"
+printf "  ${YELLOW}2.${NC} Get an API key from Anthropic:\n"
+printf "     ${BLUE}https://console.anthropic.com/${NC}\n"
 echo ""
-echo "  ${YELLOW}3.${NC} Set your API key:"
-echo "     ${GREEN}export ANTHROPIC_API_KEY=\"sk-ant-your-key-here\"${NC}"
-echo "     ${GREEN}echo 'export ANTHROPIC_API_KEY=\"sk-ant-...\"' >> $SHELL_RC${NC}"
+printf "  ${YELLOW}3.${NC} Set your API key:\n"
+printf "     ${GREEN}export ANTHROPIC_API_KEY=\"sk-ant-your-key-here\"${NC}\n"
+printf "     ${GREEN}echo 'export ANTHROPIC_API_KEY=\"sk-ant-...\"' >> $SHELL_RC${NC}\n"
 echo ""
-echo "  ${YELLOW}4.${NC} Start using SeyCode:"
-echo "     ${GREEN}sey dev${NC}                    # Start in current directory"
-echo "     ${GREEN}sey dev ~/myproject${NC}        # Start in specific project"
-echo "     ${GREEN}sey --help${NC}                 # Show help"
+printf "  ${YELLOW}4.${NC} Start using SeyCode:\n"
+printf "     ${GREEN}sey dev${NC}                    # Start in current directory\n"
+printf "     ${GREEN}sey dev ~/myproject${NC}        # Start in specific project\n"
+printf "     ${GREEN}sey --help${NC}                 # Show help\n"
 echo ""
-echo -e "${BOLD}Documentation:${NC}"
-echo "  - Quick Start: ${BLUE}$SEYCODE_HOME/QUICKSTART.md${NC}"
-echo "  - Full Guide:  ${BLUE}$SEYCODE_HOME/INSTALLATION.md${NC}"
+printf "${BOLD}Documentation:${NC}\n"
+printf "  - Quick Start: ${BLUE}$SEYCODE_HOME/QUICKSTART.md${NC}\n"
+printf "  - Full Guide:  ${BLUE}$SEYCODE_HOME/INSTALLATION.md${NC}\n"
 echo ""
-echo "For help, visit: ${BLUE}https://github.com/viseyyon/seycode${NC}"
+printf "For help, visit: ${BLUE}https://github.com/viseyyon/seycode${NC}\n"
 echo ""

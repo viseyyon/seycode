@@ -4,18 +4,29 @@
 
 set -euo pipefail
 
-# Colors
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-RED='\033[0;31m'
-BLUE='\033[0;34m'
-BOLD='\033[1m'
-NC='\033[0m'
+# Check if terminal supports colors
+if [ -t 1 ] && command -v tput >/dev/null 2>&1 && [ "$(tput colors 2>/dev/null || echo 0)" -ge 8 ]; then
+    # Colors
+    GREEN='\033[0;32m'
+    YELLOW='\033[1;33m'
+    RED='\033[0;31m'
+    BLUE='\033[0;34m'
+    BOLD='\033[1m'
+    NC='\033[0m'
+else
+    # No colors
+    GREEN=''
+    YELLOW=''
+    RED=''
+    BLUE=''
+    BOLD=''
+    NC=''
+fi
 
 echo ""
-echo -e "${BOLD}======================================"
+echo "======================================"
 echo "  Installing SeyCode (Local)"
-echo "======================================${NC}"
+echo "======================================"
 echo ""
 
 # Get current directory
@@ -35,7 +46,7 @@ else
     mkdir -p "$INSTALL_DIR"
 fi
 
-echo -e "${BLUE}Installing to: $INSTALL_DIR${NC}"
+printf "${BLUE}Installing to: $INSTALL_DIR${NC}\n"
 echo ""
 
 # Detect OS and architecture
@@ -50,7 +61,7 @@ case "$OS" in
         OS_TYPE="linux"
         ;;
     *)
-        echo -e "${RED}✗ Unsupported operating system: $OS${NC}"
+        printf "${RED}✗ Unsupported operating system: $OS${NC}\n"
         exit 1
         ;;
 esac
@@ -63,60 +74,60 @@ case "$ARCH" in
         ARCH_TYPE="aarch64"
         ;;
     *)
-        echo -e "${RED}✗ Unsupported architecture: $ARCH${NC}"
+        printf "${RED}✗ Unsupported architecture: $ARCH${NC}\n"
         exit 1
         ;;
 esac
 
-echo -e "${GREEN}✓ Detected: $OS_TYPE-$ARCH_TYPE${NC}"
+printf "${GREEN}✓ Detected: $OS_TYPE-$ARCH_TYPE${NC}\n"
 echo ""
 
 # Install/Check Bun runtime
-echo -e "${BLUE}Checking runtime...${NC}"
+printf "${BLUE}Checking runtime...${NC}\n"
 if ! command -v bun &> /dev/null; then
-    echo -e "${YELLOW}Installing runtime (Bun)...${NC}"
+    printf "${YELLOW}Installing runtime (Bun)...${NC}\n"
     if curl -fsSL https://bun.sh/install | bash; then
-        echo -e "${GREEN}✓ Runtime installed${NC}"
+        printf "${GREEN}✓ Runtime installed${NC}\n"
         export PATH="$HOME/.bun/bin:$PATH"
     else
-        echo -e "${RED}✗ Failed to install runtime${NC}"
+        printf "${RED}✗ Failed to install runtime${NC}\n"
         exit 1
     fi
 else
-    echo -e "${GREEN}✓ Runtime available${NC}"
+    printf "${GREEN}✓ Runtime available${NC}\n"
     export PATH="$HOME/.bun/bin:$PATH"
 fi
 
 echo ""
 
 # Install dependencies
-echo -e "${BLUE}Installing dependencies...${NC}"
+printf "${BLUE}Installing dependencies...${NC}\n"
 cd "$REPO_ROOT"
 
 if bun install; then
-    echo -e "${GREEN}✓ Dependencies installed${NC}"
+    printf "${GREEN}✓ Dependencies installed${NC}\n"
 else
-    echo -e "${RED}✗ Failed to install dependencies${NC}"
+    printf "${RED}✗ Failed to install dependencies${NC}\n"
     exit 1
 fi
 
 echo ""
 
 # Install sey command
-echo -e "${BLUE}Installing 'sey' command...${NC}"
+printf "${BLUE}Installing 'sey' command...${NC}\n"
 if [ -f "$REPO_ROOT/sey" ]; then
     cp "$REPO_ROOT/sey" "$INSTALL_DIR/sey"
     chmod +x "$INSTALL_DIR/sey"
-    echo -e "${GREEN}✓ Installed 'sey' command to $INSTALL_DIR/sey${NC}"
+    printf "${GREEN}✓ Installed 'sey' command to $INSTALL_DIR/sey${NC}\n"
 else
-    echo -e "${RED}✗ sey command not found${NC}"
+    printf "${RED}✗ sey command not found${NC}\n"
     exit 1
 fi
 
 echo ""
 
 # Configure PATH
-echo -e "${BLUE}Configuring environment...${NC}"
+printf "${BLUE}Configuring environment...${NC}\n"
 
 # Detect shell
 if [ -n "${BASH_VERSION:-}" ]; then
@@ -137,41 +148,41 @@ if ! grep -q "$PATH_EXPORT" "$SHELL_RC" 2>/dev/null; then
     echo "" >> "$SHELL_RC"
     echo "# SeyCode" >> "$SHELL_RC"
     echo "$PATH_EXPORT" >> "$SHELL_RC"
-    echo -e "${GREEN}✓ Added to $SHELL_RC${NC}"
+    printf "${GREEN}✓ Added to $SHELL_RC${NC}\n"
 else
-    echo -e "${GREEN}✓ Already configured in $SHELL_RC${NC}"
+    printf "${GREEN}✓ Already configured in $SHELL_RC${NC}\n"
 fi
 
 # Export for current session
 export PATH="$INSTALL_DIR:$PATH"
 
 echo ""
-echo -e "${BOLD}======================================"
-echo -e "${GREEN}✓ SeyCode Installed Successfully!${NC}"
-echo -e "${BOLD}======================================${NC}"
+echo "======================================"
+printf "${GREEN}✓ SeyCode Installed Successfully!${NC}\n"
+echo "======================================"
 echo ""
-echo -e "${BOLD}Next Steps:${NC}"
+printf "${BOLD}Next Steps:${NC}\n"
 echo ""
-echo "  ${YELLOW}1.${NC} Reload your shell:"
-echo "     ${GREEN}source $SHELL_RC${NC}"
-echo "     ${GREEN}# or restart your terminal${NC}"
+printf "  ${YELLOW}1.${NC} Reload your shell:\n"
+printf "     ${GREEN}source $SHELL_RC${NC}\n"
+printf "     ${GREEN}# or restart your terminal${NC}\n"
 echo ""
-echo "  ${YELLOW}2.${NC} Get an API key from Anthropic:"
-echo "     ${BLUE}https://console.anthropic.com/${NC}"
+printf "  ${YELLOW}2.${NC} Get an API key from Anthropic:\n"
+printf "     ${BLUE}https://console.anthropic.com/${NC}\n"
 echo ""
-echo "  ${YELLOW}3.${NC} Set your API key:"
-echo "     ${GREEN}export ANTHROPIC_API_KEY=\"sk-ant-your-key-here\"${NC}"
-echo "     ${GREEN}echo 'export ANTHROPIC_API_KEY=\"sk-ant-...\"' >> $SHELL_RC${NC}"
+printf "  ${YELLOW}3.${NC} Set your API key:\n"
+printf "     ${GREEN}export ANTHROPIC_API_KEY=\"sk-ant-your-key-here\"${NC}\n"
+printf "     ${GREEN}echo 'export ANTHROPIC_API_KEY=\"sk-ant-...\"' >> $SHELL_RC${NC}\n"
 echo ""
-echo "  ${YELLOW}4.${NC} Start using SeyCode:"
-echo "     ${GREEN}sey dev${NC}                    # Start in current directory"
-echo "     ${GREEN}sey dev ~/myproject${NC}        # Start in specific project"
-echo "     ${GREEN}sey --help${NC}                 # Show help"
+printf "  ${YELLOW}4.${NC} Start using SeyCode:\n"
+printf "     ${GREEN}sey dev${NC}                    # Start in current directory\n"
+printf "     ${GREEN}sey dev ~/myproject${NC}        # Start in specific project\n"
+printf "     ${GREEN}sey --help${NC}                 # Show help\n"
 echo ""
-echo -e "${BOLD}Test it now:${NC}"
-echo "  ${GREEN}$INSTALL_DIR/sey --version${NC}"
+printf "${BOLD}Test it now:${NC}\n"
+printf "  ${GREEN}$INSTALL_DIR/sey --version${NC}\n"
 echo ""
-echo -e "${BOLD}Documentation:${NC}"
-echo "  - Quick Start: ${BLUE}$REPO_ROOT/QUICKSTART.md${NC}"
-echo "  - Full Guide:  ${BLUE}$REPO_ROOT/INSTALLATION.md${NC}"
+printf "${BOLD}Documentation:${NC}\n"
+printf "  - Quick Start: ${BLUE}$REPO_ROOT/QUICKSTART.md${NC}\n"
+printf "  - Full Guide:  ${BLUE}$REPO_ROOT/INSTALLATION.md${NC}\n"
 echo ""
