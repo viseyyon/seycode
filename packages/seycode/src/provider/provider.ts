@@ -184,10 +184,11 @@ export namespace Provider {
       return {
         autoload: false,
         async getModel(sdk: any, modelID: string, options?: Record<string, any>) {
+          if (sdk.responses === undefined && sdk.chat === undefined) return sdk.languageModel(modelID)
           if (options?.["useCompletionUrls"]) {
-            return sdk.chat(modelID)
+            return sdk.chat ? sdk.chat(modelID) : sdk.languageModel(modelID)
           } else {
-            return sdk.responses(modelID)
+            return sdk.responses ? sdk.responses(modelID) : sdk.chat ? sdk.chat(modelID) : sdk.languageModel(modelID)
           }
         },
         options: {},
@@ -198,10 +199,11 @@ export namespace Provider {
       return {
         autoload: false,
         async getModel(sdk: any, modelID: string, options?: Record<string, any>) {
+          if (sdk.responses === undefined && sdk.chat === undefined) return sdk.languageModel(modelID)
           if (options?.["useCompletionUrls"]) {
-            return sdk.chat(modelID)
+            return sdk.chat ? sdk.chat(modelID) : sdk.languageModel(modelID)
           } else {
-            return sdk.responses(modelID)
+            return sdk.responses ? sdk.responses(modelID) : sdk.chat ? sdk.chat(modelID) : sdk.languageModel(modelID)
           }
         },
         options: {
